@@ -1,12 +1,13 @@
 FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30053
 
-ENV PLANEFINDER_SHARECODE
-ENV LAT
-ENV LON
-ENV RECEIVER_HOST dump1090-fa
-ENV RECEIVER_PORT 30002
+ENV PLANEFINDER_SHARECODE=
+ENV LAT=
+ENV LON=
+ENV RECEIVER_HOST=dump1090-fa
+ENV RECEIVER_PORT=30002
 
 RUN apt-get update && \
 	apt-get install -y wget gettext-base && \
