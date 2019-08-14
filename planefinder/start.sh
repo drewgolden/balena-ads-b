@@ -13,11 +13,11 @@ while [ "$missing_variables" = true ]; do
         
         # Begin defining all the required configuration variables.
 
-        [ -z "$PLANEFINDER_SHARECODE" ] && echo "Plane Finder Sharecode not set, holding startup" && missing_variables=true || echo "Plane Finder Sharecode set"
-        [ -z "RECEIVER_HOST" ] && echo "Receiver host not set, holding startup" && missing_variables=true || echo "Receiver host set"
-        [ -z "RECEIVER_PORT" ] && echo "Receiver port not set, holding startup" && missing_variables=true || echo "Receiver port set"
-        [ -z "LAT" ] && echo "Receiver latitude not set, holding startup" && missing_variables=true || echo "Receiver latitude set"
-        [ -z "LON" ] && echo "Receiver longitude not set, holding startup" && missing_variables=true || echo "Receiver longitude set"
+        [ -z "$PLANEFINDER_SHARECODE" ] && echo "Plane Finder Sharecode is missing, halting startup." && missing_variables=true || echo "Plane Finder Sharecode is set: $PLANEFINDER_SHARECODE"
+        [ -z "$RECEIVER_HOST" ] && echo "Receiver host is missing, halting startup." && missing_variables=true || echo "Receiver host is set: $RECEIVER_HOST"
+        [ -z "$RECEIVER_PORT" ] && echo "Receiver port is missing, halting startup." && missing_variables=true || echo "Receiver port is set: $RECEIVER_PORT"
+        [ -z "$LAT" ] && echo "Receiver latitude is missing, halting startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
+        [ -z "$LON" ] && echo "Receiver longitude is missing, halting startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
 
         # End defining all the required configuration variables.
 
@@ -25,7 +25,7 @@ while [ "$missing_variables" = true ]; do
         
         if [ "$missing_variables" = true ]
         then
-                echo "Missing settings, waiting 60 seconds..."
+                echo "Settings missing, halting startup for 60 seconds..."
                 echo " "
                 sleep 60
         fi
