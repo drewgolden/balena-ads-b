@@ -34,7 +34,7 @@ In addition to the Pi, you will need an RTL-SDR compatible USB dongle. The dongl
  8. Rename your device to your taste by clicking on the pencil icon next to the current device name.
  9. Next, we'll configure the receive with its geographic location. Unless you happen to know this by heart, you can use [Google Maps](https://maps.google.com) to find it. When you click on your desired location on the map, the corresponding coordinates should appear. We are looking for the decimal coordinates, which should look similar to this: 60.395429, 5.325127.
  10. Back in the Balena console, verify that you have opened up the view for your desired device. Click on the *Device Variables*-button – *D(x)*. Add the following two variables: `LAT` *(Receiver Latitude)*, e.g. with a value such as `60.12345` and `LON` *(Receiver Longitude)*, e.g. with a value such as `4.12345`.
- 11. Now, you're going to enter the receiver's altitude in feet above sea level in a new variable named `ALT`. If you don't know the altitude, you can find it using [one of several online services](https://www.maps.ie/coordinates.html). If your antenna is mounted above ground level, remember to add the approximate number of corresponding feet.
+ 11. Now, you're going to enter the receiver's altitude in *meters* above sea level in a new variable named `ALT`. If you don't know the altitude, you can find it using [one of several online services](https://www.maps.ie/coordinates.html). If your antenna is mounted above ground level, remember to add the approximate number of corresponding meters.
  12. Almost there! Next, we are going to push this code to your device through the Balena cloud. Head into your terminal and clone this repository to your local computer: `git clone git@github.com:ketilmo/balena-ads-b.git`
  13. Add a Balena remote to your newly created local Git repo. You'll find the exact command you need for this at the Application page in your Balena dashboard. It should look something like this: `git remote add balena your_username@git.balena-cloud.com:your_username/your_application_name.git`
  14. Push the code to Balena's servers by typing `git push balena master`. 
@@ -110,7 +110,7 @@ If you have not previously set up a FlightRadar24 receiver that you want to reus
  7. If you want to activate multilateration, type `yes` at the next prompt. If you have restricted bandwidth available, consider leaving it off by typing `no`. 
  8. Enter the receiver's latitude. This should be the exact same value that you entered in the `LAT` variable in part 1.
  9. Enter the receiver's longitude. This should be the exact same value that you entered in the `LON` variable in part 1.
- 10. Finally, enter the receiver's altitude in feet. This should be the same value that you entered in the `ALT` variable in part 1.
+ 10. Finally, enter the receiver's altitude in *feet*. You can calculate this by multiplying the value that you entered in the `ALT` variable in part 1 by 3.28.
  11. Now, a summary of your settings will be displayed. If you are happy with the result, type `yes` to continue.
  12. Under receiver type, choose `4` for ModeS Beast.
  13. Under connection type, choose `1` for network connection.
