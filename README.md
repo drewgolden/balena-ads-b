@@ -145,18 +145,22 @@ If you have not previously set up a Plane Finder receiver that you want to reuse
  6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
  7. On your device's page in the Balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
 
-## Part 6 – Exploring flight traffic locally
-If the setup went well, you should now be feeding flight traffic data to several online services. In return for this, you will receive access to the providers' premium services. In addition to this, you can tune into the radar views straight on your Raspberry Pi.
+## Part 6 – Exploring flight traffic locally on your device
+If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
-### Views available in the local network
+When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in Balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
 
-When you have local network access to your receiver, you get several beautiful web views. Start by opening your device page in Balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`.
+Away from your local network but still eager to know what planes are cruising over your home? Here, Balena's builtin *Public Device URL* comes in handy. Open your device page in Balena console and locate the `PUBLIC DEVICE URL` header, and flip the switch below to enable it. Finally, click on the arrow icon next to the button, add the desired URL postfix specified below and voila – you should see what's going on in your area.
+
 
  **Dump1090's Radar View**
-This view visualizes everything that your receiver sees, including multilaterated plane positions. Head to `YOURIP:8080` to check it out.
+This view visualizes everything that your receiver sees, including multilaterated plane positions. When you are in your local network, head to `YOURIP:8080` to check it out. When remote, open Balena's *Public Device URL* and add `/dump1090-fa/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/dump1090-fa/` *(Pay attention to the trailing slash.)*
 
 **Plane Finder's Radar View**
-Similar to the Dump1090, Plane Finder adds 3D visualization and other nice viewing options. Head to `YOURIP:30053` to check it out.
+It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice viewing options. Head to `YOURIP:30053` to check it out. When remote, open Balena's *Public Device URL* and add `/planefinder/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/planefinder/` *(Pay attention to the trailing slash.)*
 
-### Views available remotely through Balena's proxy
-Away from your local network but still eager to know what planes are cruising over your home? Here, Balena's builtin *Public Device URL* comes in handy. Open your device page in Balena console and locate the `PUBLIC DEVICE URL` header, and flip the switch below it. Finally, click on the arrow icon next to the button and voila – you should see your traffic through the Dump1090 radar view. Enjoy!
+
+**Flightradar24 Status Page**
+Less visual than the two other options, Flightradar24's status page gives you high level statistics and a metrics about how your feeder is doing. Head to `YOURIP:8754` to check it out. When remote, open Balena's *Public Device URL* and add `/fr24feed/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/fr24feed/` *(Pay attention to the trailing slash.)*
+
+Enjoy!
