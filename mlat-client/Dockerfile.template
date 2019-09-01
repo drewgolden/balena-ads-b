@@ -1,8 +1,17 @@
 FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
 LABEL maintainer="https://github.com/ketilmo"
 
+ENV LAT=
+ENV LON=
+ENV ALT=
+ENV MLAT_CLIENT_USER=
+ENV MLAT_SERVER=
+ENV RECEIVER_HOST=dump1090-fa
+ENV RECEIVER_PORT=30005
+
 RUN apt-get update && \
-	apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers supervisor
+	apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers supervisor && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --recursive https://github.com/mutability/mlat-client.git
 WORKDIR mlat-client
@@ -11,7 +20,8 @@ RUN dpkg-buildpackage -b -uc
 
 RUN dpkg -i ../mlat-client_*_*.deb
 
-ADD supervisor /etc/supervisor
+COPY start.sh /
 
-ENTRYPOINT ["supervisord"]
-CMD ["-c", "/etc/supervisor/supervisord.conf"]
+RUN chmod +x /start.sh
+
+ENTRYPOINT ["/start.sh"]
