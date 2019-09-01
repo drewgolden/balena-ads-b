@@ -8,5 +8,6 @@
    "data_format":"4",
    "latitude":"${LAT}",
    "longitude":"${LON}",
+   "google_maps_api_key":"${GOOGLE_MAPS_API_KEY}",
    "sharecode":"${PLANEFINDER_SHARECODE}"
 }
