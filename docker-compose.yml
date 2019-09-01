@@ -1,11 +1,10 @@
 version: '2'
 services:
   frontend-proxy:
-    image: traefik # The official Traefik docker image
+    image: traefik
     build: ./traefik
     ports:
-      - "80:80"     # The HTTP port
-#     - "8081:8080" # The Web UI (enabled by --api)
+      - "80:80"
     labels:
       io.balena.features.balena-socket: '1'
   dump1090-fa:
@@ -28,10 +27,11 @@ services:
       - "8080:8080"
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.redirect.regex=^(.*)/dump1090-fa$$"
-      - "traefik.frontend.redirect.replacement=$$1/dump1090-fa/"
-      - "traefik.frontend.redirect.permanent=true"
-      - "traefik.a.frontend.rule=PathPrefixStrip:/dump1090-fa;ReplacePathRegex: ^/dump1090-fa/(.*) /$1"
+      - "traefik.http.routers.dump1090-fa.rule=PathPrefix(`/dump1090-fa`)"
+      - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect"
+      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa$$"
+      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/dump1090-fa/"
+      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.permanent=true"
   piaware:
     depends_on:
       - dump1090-fa
@@ -50,11 +50,21 @@ services:
       - FR24_KEY=
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.redirect.regex=^(.*)/fr24feed$$"
-      - "traefik.frontend.redirect.replacement=$$1/fr24feed/"
-      - "traefik.frontend.redirect.permanent=true"
-      - "traefik.a.frontend.rule=PathPrefixStrip:/fr24feed;ReplacePathRegex: ^/fr24feed/(.*) /$1"
-      - "traefik.b.frontend.rule=Path:/logo.png,/monitor.json,/settings.html,/restart.html,/shutdown.html,/tracked.html,/fr24.css,/jquery.js,/flights.json"
+      - "traefik.http.routers.fr24feed.rule=PathPrefix(`/fr24feed`)"
+      - "traefik.http.routers.fr24feed-a.rule=Path(`/logo.png`)"
+      - "traefik.http.routers.fr24feed-b.rule=Path(`/monitor.json`)"
+      - "traefik.http.routers.fr24feed-c.rule=Path(`/settings.html`)"
+      - "traefik.http.routers.fr24feed-d.rule=Path(`/restart.html`)"
+      - "traefik.http.routers.fr24feed-e.rule=Path(`/tracked.html`)"
+      - "traefik.http.routers.fr24feed-f.rule=Path(`/fr24.css`)"
+      - "traefik.http.routers.fr24feed-g.rule=Path(`/jquery.js`)"
+      - "traefik.http.routers.fr24feed-h.rule=Path(`/flights.json`)"
+      - "traefik.http.routers.fr24feed-i.rule=Path(`/shutdown.html`)"
+      - "traefik.http.routers.fr24feed.middlewares=fr24feed-redirect,fr24feed-stripprefix"
+      - "traefik.http.middlewares.fr24feed-redirect.redirectregex.regex=^.*/fr24feed$$"
+      - "traefik.http.middlewares.fr24feed-redirect.redirectregex.replacement=/fr24feed/"
+      - "traefik.http.middlewares.fr24feed-redirect.redirectregex.permanent=true"
+      - "traefik.http.middlewares.fr24feed-stripprefix.stripprefix.prefixes=/fr24feed"
   planefinder:
     depends_on:
       - dump1090-fa
@@ -64,10 +74,20 @@ services:
       - "30053:30053"
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.redirect.regex=^(.*)/planefinder$$"
-      - "traefik.frontend.redirect.replacement=$$1/planefinder/"
-      - "traefik.frontend.redirect.permanent=true"
-      - "traefik.a.frontend.rule=PathPrefixStrip:/planefinder;ReplacePathRegex: ^/planefinder/(.*) /$1"
-      - "traefik.b.frontend.rule=PathPrefix:/"
-      - "traefik.c.frontend.rule=PathPrefix:/ajax/,/assets/,/client/"
-      - "traefik.d.frontend.rule=Path:/map.html,/map3D.html,/data.html,/logs.html,/viz.html,/stats.html,/setup.html"
+      - "traefik.http.routers.planefinder.rule=PathPrefix(`/planefinder`)"
+      - "traefik.http.routers.planefinder-a.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.planefinder-b.rule=PathPrefix(`/ajax/`)"
+      - "traefik.http.routers.planefinder-c.rule=PathPrefix(`/assets/`)"
+      - "traefik.http.routers.planefinder-d.rule=PathPrefix(`/client/`)"
+      - "traefik.http.routers.planefinder-e.rule=Path(`/map.html`)"
+      - "traefik.http.routers.planefinder-f.rule=Path(`/map3D.html`)"
+      - "traefik.http.routers.planefinder-g.rule=Path(`/data.html`)"
+      - "traefik.http.routers.planefinder-h.rule=Path(`/logs.html`)"
+      - "traefik.http.routers.planefinder-i.rule=Path(`/viz.html`)"
+      - "traefik.http.routers.planefinder-j.rule=Path(`/stats.html`)"
+      - "traefik.http.routers.planefinder-l.rule=Path(`/setup.html`)"
+      - "traefik.http.routers.planefinder.middlewares=planefinder-redirect,planefinder-stripprefix"
+      - "traefik.http.middlewares.planefinder-redirect.redirectregex.regex=^.*/planefinder$$"
+      - "traefik.http.middlewares.planefinder-redirect.redirectregex.replacement=/planefinder/"
+      - "traefik.http.middlewares.planefinder-redirect.redirectregex.permanent=true"
+      - "traefik.http.middlewares.planefinder-stripprefix.stripprefix.prefixes=/planefinder"
