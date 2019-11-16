@@ -112,12 +112,12 @@ If you have not previously set up a FlightRadar24 receiver that you want to reus
  9. Enter the receiver's longitude. This should be the exact same value that you entered in the `LON` variable in part 1.
  10. Finally, enter the receiver's altitude in *feet*. You can calculate this by multiplying the value that you entered in the `ALT` variable in part 1 by 3.28.
  11. Now, a summary of your settings will be displayed. If you are happy with the result, type `yes` to continue.
- 12. Under receiver type, choose `4` for ModeS Beast.
+ 12. Under receiver type, choose `5` for AVR (TCP).
  13. Under connection type, choose `1` for network connection.
  14. When asked for your receiver's IP address/hostname, enter `dump1090-fa`.
- 15. Next, enter the data port number: `30005`.
- 16. Type `yes` to enable the RAW data feed on port 30334.
- 17. Type `yes` to enable the Basestation data feed on port 30003.
+ 15. Next, enter the data port number: `30002`.
+ 16. Type `no` to disable the RAW data feed on port 30334.
+ 17. Type `no` to disable the Basestation data feed on port 30003.
  18. Enter `0` to disable log file writing.
  19. When asked for a log file path, just hit return.
  20. The configuration will now be submitted, and you are redirected back to the terminal.
