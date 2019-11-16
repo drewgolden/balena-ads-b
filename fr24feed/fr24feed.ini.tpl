@@ -1,4 +1,4 @@
-receiver="beast-tcp"
+receiver="avr-tcp"
 fr24key="${FR24_KEY}"
 host="${RECEIVER_HOST}:${RECEIVER_PORT}"
 bs="no"

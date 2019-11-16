@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fr24feed
 
 ENV RECEIVER_HOST dump1090-fa
-ENV RECEIVER_PORT 30005
+ENV RECEIVER_PORT 30002
 
 RUN apt-get update && \
 	apt-get install -y supervisor gettext-base
