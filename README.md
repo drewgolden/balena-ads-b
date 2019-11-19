@@ -14,9 +14,10 @@ Thanks to [compujuckel](https://github.com/compujuckel/) and [Glenn Stewart](htt
 
 ## Part 1 – Build the receiver
 
-We'll build the receiver using the parts that are outlined on the Flightradar24 and FlightAware websites: 
+We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware and RadarBox websites: 
 - https://www.flightradar24.com/build-your-own
-- https://flightaware.com/adsb/piaware/build.
+- https://flightaware.com/adsb/piaware/build
+- https://www.radarbox24.com/raspberry-pi
 
 If you wish to keep the setup as cheap as possible, you can use a Raspberry Pi Zero rather than the described Raspberry Pi 3 B+. The Raspberry Pi Zero comes without ethernet, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. Keep in mind that the Zero is less powerful than the 3 B+. If you plan to run a lot of services simultaneously, you should probably go all-in on the 3 B+.
 
@@ -112,10 +113,10 @@ If you have not previously set up a FlightRadar24 receiver that you want to reus
  9. Enter the receiver's longitude. This should be the exact same value that you entered in the `LON` variable in part 1.
  10. Finally, enter the receiver's altitude in *feet*. You can calculate this by multiplying the value that you entered in the `ALT` variable in part 1 by 3.28.
  11. Now, a summary of your settings will be displayed. If you are happy with the result, type `yes` to continue.
- 12. Under receiver type, choose `5` for AVR (TCP).
+ 12. Under receiver type, choose `4` for ModeS Beast.
  13. Under connection type, choose `1` for network connection.
  14. When asked for your receiver's IP address/hostname, enter `dump1090-fa`.
- 15. Next, enter the data port number: `30002`.
+ 15. Next, enter the data port number: `30005`.
  16. Type `no` to disable the RAW data feed on port 30334.
  17. Type `no` to disable the Basestation data feed on port 30003.
  18. Enter `0` to disable log file writing.
@@ -145,7 +146,27 @@ If you have not previously set up a Plane Finder receiver that you want to reuse
  6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
  7. On your device's page in the Balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
 
-## Part 6 – Exploring flight traffic locally on your device
+## Part 6 – Configure RadarBox
+### Alternative A: Port an existing RadarBox receiver
+If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
+
+ 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RB24_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1` and a variable named `RB24_STN` with a similar value like this: `EXTRPI000000`. The key is located in the RadarBox config file, which is usually found here: `/etc/rbfeeder.ini`. You can find your key at AirNav RadarBox's *[Account](https://www.radarbox24.com/)*
+ 2. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+
+### Alternative B: Setup a new RadarBox receiver
+If you have not previously set up a RadarBox receiver that you want to reuse, do the following steps:
+
+ 1. Head back to your device's page on the Balena dashboard.
+ 2. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
+ 3. This will open a terminal which lets you interact directly with your RadarBox container.
+ 4. At the prompt, enter `rbfeeder`.
+ 5. A summary of your settings will be displayed. Find the line with key like this `546b69e69b4671a742b82b10c674cdc1`
+ 6. Please insert your sharing key under your *[Account](https://www.radarbox24.com/raspberry-pi/claim)*
+ 7. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RB24_KEY` and paste the value from the previous step, e.g. `546b69e69b4671a742b82b10c674cdc1` and add a variable named `RB24_STN` with a similar value like this, which is your station id: `EXTRPI000000`.
+ 8. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 9. As soon as your receiver starts receiving data, you will receive an e-mail from RadarBox containing your login credentials. 
+
+## Part 7 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
 When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in Balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
