@@ -3,7 +3,7 @@ LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 80 8080 443
 
-ENV TRAEFIK_VERSION=2.0.0-rc1
+ENV TRAEFIK_VERSION=2.1.4
 ENV TRAEFIK_ARCH=armv5
 
 RUN apt-get update && \
