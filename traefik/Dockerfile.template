@@ -1,9 +1,9 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 80 8080 443
 
-ENV TRAEFIK_VERSION=2.1.4
+ENV TRAEFIK_VERSION=2.2.1
 ENV TRAEFIK_ARCH=armv5
 
 RUN apt-get update && \

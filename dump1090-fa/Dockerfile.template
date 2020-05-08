@@ -1,20 +1,20 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 
 RUN apt-get update && \
-	apt-get install -y librtlsdr-dev fakeroot dpkg-dev git debhelper libusb-1.0-0-dev pkg-config dh-systemd libncurses5-dev libusb-1.0-0 build-essential cmake libtecla1 libtecla-dev wget doxygen help2man pandoc
+	apt-get install -y librtlsdr-dev fakeroot dpkg-dev git debhelper libusb-1.0-0-dev pkg-config dh-systemd libncurses5-dev libusb-1.0-0 build-essential cmake libtecla1 libtecla-dev wget doxygen help2man pandoc 
 
 RUN git clone --recursive https://github.com/Nuand/bladeRF.git
 WORKDIR bladeRF
-RUN git checkout tags/2016.06
+RUN git checkout tags/2019.07
 RUN dpkg-buildpackage -b
 
 WORKDIR /
-RUN dpkg -i libbladerf1_2016.06_*.deb libbladerf-dev_2016.06*.deb
+RUN dpkg -i libbladerf2_2019.07_*.deb libbladerf-dev_2019.07*.deb
 COPY ./rtlsdr-blacklist.conf /etc/modprobe.d/rtlsdr-blacklist.conf
 
 WORKDIR tmp
 
-RUN wget http://flightaware.com/adsb/piaware/files/packages/pool/piaware/p/piaware-support/piaware-repository_3.8.0~bpo9+1_all.deb
+RUN wget https://flightaware.com/adsb/piaware/files/packages/pool/piaware/p/piaware-support/piaware-repository_3.8.1_all.deb
 
 RUN apt-get update && \
 	apt-get install -y librtlsdr0 libusb-1.0-0 init-system-helpers lighttpd supervisor

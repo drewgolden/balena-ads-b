@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 LABEL maintainer="https://github.com/ketilmo"
 
 ENV LAT=
