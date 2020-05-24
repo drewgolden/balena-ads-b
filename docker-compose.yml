@@ -11,7 +11,7 @@ services:
     volumes:
       - 'settings:/usr/src/app/settings'
   wifi-connect:
-    build: ./wifi-connect
+    build: ./balena-dash/wifi-connect
     restart: always
     network_mode: host
     privileged: true
