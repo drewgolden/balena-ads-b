@@ -1,2 +1,16 @@
-applicationConfigVariables:
- - RESIN_HOST_CONFIG_gpu_mem: 128
+version: "2"
+slug: "balena-ads-b"
+name: "Balena ADS-B Flight Tracker"
+type: "sw.application"
+assets:
+  - url: "https://github.com/ketilmo/balena-ads-b"
+    name: "repository"
+  - url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/logo.png"
+    name: "logo"
+data:
+  description: "Track the flight traffic over your head with a Raspberry Pi running balena and a cheap RTL-SDR USB dongle."
+  applicationConfigVariables:
+    - RESIN_HOST_CONFIG_gpu_mem: 128
+  defaultDeviceType: "raspberrypi3"
+  supportedDeviceTypes:
+    - "raspberrypi3"
