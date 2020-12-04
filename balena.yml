@@ -5,7 +5,7 @@ type: "sw.application"
 assets:
   - url: "https://github.com/ketilmo/balena-ads-b"
     name: "repository"
-  - url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/logo.png"
+  - url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/logo.png"
     name: "logo"
 data:
   description: "Track the flight traffic over your head with a Raspberry Pi running balena and a cheap RTL-SDR USB dongle."
