@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
+![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
 **ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, and PlaneFinder.**
 
