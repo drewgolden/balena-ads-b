@@ -1,6 +1,6 @@
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, and PlaneFinder.**
+**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, and PlaneFinder**
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a Raspberry Pi running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), and [Plane Finder](https://planefinder.net/). In return, you will receive free premium accounts (worth several hundred dollars/year)! 
 
