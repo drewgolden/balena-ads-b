@@ -4,12 +4,13 @@
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a Raspberry Pi running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), and [Plane Finder](https://planefinder.net/). In return, you will receive free premium accounts (worth several hundred dollars/year)! 
 
-This project is inspired by and has borrowed code from the following repos:  
+This project is inspired by and has borrowed code from the following repos and forum threads:  
 
  - https://github.com/compujuckel/adsb-docker
- - https://bitbucket.org/inodes/resin-docker-rtlsdr.
+ - https://bitbucket.org/inodes/resin-docker-rtlsdr
+ - [https://discussions.flightaware.com/](https://discussions.flightaware.com/t/howto-install-piaware-4-0-on-debian-10-amd64-ubuntu-20-amd64-kali-2020-amd64-on-pc/69753/3)
 
-Thanks to [compujuckel](https://github.com/compujuckel/) and [Glenn Stewart](https://bitbucket.org/inodes/) for sharing!
+Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), and [abcd567a](https://github.com/abcd567a) for sharing!
 
 ## Part 1 – Build the receiver
 
