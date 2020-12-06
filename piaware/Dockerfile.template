@@ -1,30 +1,51 @@
 FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+LABEL maintainer="https://github.com/ketilmo"
 
-RUN apt-get update && \
-	apt-get install -y build-essential debhelper tcl8.6-dev autoconf python3-dev python3-venv dh-systemd libz-dev git
-
+ENV PIAWARE_VERSION=v4.0
+ENV FLIGHTAWARE_FEEDER_ID=
 ENV RECEIVER_HOST dump1090-fa
-ENV RECEIVER_PORT 30005
+ENV RECEIVER_PORT 30005start
 ENV RECEIVER_MLAT_PORT 30104
 
-RUN apt-get update && \
-	apt-get install -y libexpat1 libreadline7 libssl1.1 libtcl8.6 net-tools tclx8.4 tcl8.6 tcllib tcl-tls itcl3 supervisor wget
+RUN apt-get update && \ 
+	apt-get install -y git build-essential debhelper \
+	dh-systemd libssl-dev tcl-dev chrpath wget
 
 WORKDIR tmp
 
-RUN wget https://flightaware.com/adsb/piaware/files/packages/pool/piaware/p/piaware-support/piaware-repository_4.0_all.deb
+RUN git clone http://github.com/flightaware/tcltls-rebuild.git && \
+	cd tcltls-rebuild && \
+	./prepare-build.sh buster && \
+	cd package-buster && \
+	dpkg-buildpackage -b --no-sign && \
+	cd .. && \
+	dpkg -i tcl-tls_*.deb && \
+	apt-mark hold tcl-tls 
 
-RUN dpkg -i piaware*.deb
+RUN apt-get update && \ 
+	apt-get install -y git debhelper dh-systemd \
+	libboost-system-dev libboost-program-options-dev \
+	libboost-regex-dev libboost-filesystem-dev net-tools \
+	tclx8.4 tcllib itcl3 python3-dev python3-venv
 
-RUN dpkg -i piaware*.deb
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    piaware 
+WORKDIR tmp
+
+RUN git clone http://github.com/flightaware/piaware_builder && \
+	cd piaware_builder && \
+	git checkout tags/${PIAWARE_VERSION} && \
+	./sensible-build.sh buster && \
+	cd package-buster && \
+    dpkg-buildpackage -b --no-sign && \
+	cd .. && \
+	dpkg -i piaware_*.deb 
+
 RUN piaware-config allow-auto-updates yes && \
     piaware-config allow-manual-updates yes
 
-ADD supervisor /etc/supervisor
-WORKDIR /
-ADD start.sh .
-RUN chmod +x start.sh
+RUN mkdir -p /run/piaware
+
+COPY start.sh /
+
+RUN chmod +x /start.sh
 
 ENTRYPOINT ["/start.sh"]
