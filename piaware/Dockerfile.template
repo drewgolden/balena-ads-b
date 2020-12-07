@@ -9,9 +9,10 @@ ENV RECEIVER_MLAT_PORT 30104
 
 RUN apt-get update && \ 
 	apt-get install -y git build-essential debhelper \
-	dh-systemd libssl-dev tcl-dev chrpath wget
+	dh-systemd libssl-dev tcl-dev chrpath wget && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR tmp
+WORKDIR /tmp
 
 RUN git clone http://github.com/flightaware/tcltls-rebuild.git && \
 	cd tcltls-rebuild && \
@@ -20,15 +21,17 @@ RUN git clone http://github.com/flightaware/tcltls-rebuild.git && \
 	dpkg-buildpackage -b --no-sign && \
 	cd .. && \
 	dpkg -i tcl-tls_*.deb && \
-	apt-mark hold tcl-tls 
+	apt-mark hold tcl-tls && \
+	rm -rf /tmp/*
 
 RUN apt-get update && \ 
 	apt-get install -y git debhelper dh-systemd \
 	libboost-system-dev libboost-program-options-dev \
 	libboost-regex-dev libboost-filesystem-dev net-tools \
-	tclx8.4 tcllib itcl3 python3-dev python3-venv
+	tclx8.4 tcllib itcl3 python3-dev python3-venv && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR tmp
+WORKDIR /tmp
 
 RUN git clone http://github.com/flightaware/piaware_builder && \
 	cd piaware_builder && \
@@ -37,7 +40,8 @@ RUN git clone http://github.com/flightaware/piaware_builder && \
 	cd package-buster && \
     dpkg-buildpackage -b --no-sign && \
 	cd .. && \
-	dpkg -i piaware_*.deb 
+	dpkg -i piaware_*.deb && \
+	rm -rf /tmp/*
 
 RUN piaware-config allow-auto-updates yes && \
     piaware-config allow-manual-updates yes
