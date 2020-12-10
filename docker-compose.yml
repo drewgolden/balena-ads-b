@@ -50,7 +50,6 @@ services:
     ports:
       - "8080:8080"
     labels:
-      - "io.balena.features.kernel-modules=true"
       - "traefik.enable=true"
       - "traefik.http.routers.dump1090-fa.rule=PathPrefix(`/dump1090-fa`)"
       - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect"
