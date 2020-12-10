@@ -18,8 +18,6 @@ RUN apt-get update && \
 
 WORKDIR /tmp
 
-COPY ./rtlsdr-blacklist.conf /etc/modprobe.d/rtlsdr-blacklist.conf
-
 RUN git clone https://github.com/flightaware/dump1090 && \
 	cd dump1090 && \
 	git checkout tags/${DUMP1090_VERSION} && \
