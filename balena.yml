@@ -1,6 +1,6 @@
 version: "2"
 slug: "balena-ads-b"
-name: "Balena ADS-B Flight Tracker"
+name: "ADS-B Flight Tracker"
 type: "sw.application"
 assets:
   - url: "https://github.com/ketilmo/balena-ads-b"
