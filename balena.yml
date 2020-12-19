@@ -16,3 +16,4 @@ data:
     - "raspberry-pi"
     - "raspberrypi3"
     - "raspberrypi4-64"
+    - "fincm3"
