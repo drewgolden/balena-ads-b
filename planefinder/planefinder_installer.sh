@@ -8,6 +8,11 @@ if [ "$arch" = "arm64" ]; then
 	dpkg --add-architecture armhf
 	apt-get update && \
 		apt-get install -y gcc-8-base:armhf libc6:armhf libgcc1:armhf libidn2-0:armhf libunistring2:armhf
+elif [ "$arch" = "amd64" ]; then 
+	planefinder_arch="i386"
+	dpkg --add-architecture i386
+	apt-get update && \
+		apt-get install -y gcc-8-base:i386 libc6:i386 libgcc1:i386 libidn2-0:i386 libunistring2:i386
 else 
 	planefinder_arch="armhf" 
 	apt-get update && \

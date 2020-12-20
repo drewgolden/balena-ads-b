@@ -4,19 +4,16 @@ LABEL maintainer="https://github.com/ketilmo"
 EXPOSE 80 8080 443
 
 ENV TRAEFIK_VERSION=2.3.6
-ENV TRAEFIK_ARCH=armv5
 
 RUN apt-get update && \
 	apt-get install -y wget && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Golang is installed to identify the correct architecture to donwload.
+WORKDIR /tmp
 
-RUN wget --quiet -O traefik.tar.gz "https://github.com/containous/traefik/releases/download/v${TRAEFIK_VERSION}/traefik_v${TRAEFIK_VERSION}_linux_${TRAEFIK_ARCH}.tar.gz"; 
-
-RUN tar -C /usr/bin/ -zxvf traefik.tar.gz && rm traefik.tar.gz
-
-RUN chmod +x /usr/bin/traefik
+COPY traefik_installer.sh /tmp
+RUN chmod +x /tmp/traefik_installer.sh
+RUN ./traefik_installer.sh
 
 RUN ln -s /var/run/balena.sock /var/run/docker.sock
 
