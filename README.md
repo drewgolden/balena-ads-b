@@ -1,10 +1,31 @@
+
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, and PlaneFinder**
+**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, PlaneFinder, and OpenSky Network.**
 
-Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a Raspberry Pi running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), and [Plane Finder](https://planefinder.net/). In return, you will receive free premium accounts (worth several hundred dollars/year)! 
+Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), and [OpenSky Network](https://opensky-network.org/). In return, you will receive free premium accounts worth several hundred dollars/year! 
 
-**This project now supports Raspberry Pi 4, as well as Zero and 3 B+.**
+**Supported devices**
+<table>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/fincm3/2.58.3%2Brev1.prod/logo.svg" alt="fincm3" style="max-width: 100%; margin: 0px 4px;"></td><td> balenaFin</td>
+</tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/intel-nuc/2.50.1%2Brev1.prod/logo.svg" alt="intel-nuc" style="max-width: 100%; margin: 0px 4px;"></td><td> Intel NUC</td>
+</tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/raspberry-pi/2.54.2%2Brev1.prod/logo.svg" alt="raspberry-pi" style="max-width: 100%; margin: 0px 4px;"></td><td> Raspberry Pi Zero and Zero W</td>
+</tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/raspberry-pi/2.54.2%2Brev1.prod/logo.svg" alt="raspberry-pi" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 1 Model B+</td>
+</tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/raspberrypi3/2.58.3%2Brev1.prod/logo.svg" alt="raspberrypi3" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 3 Model B+</td>
+</tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/raspberrypi4-64/2.65.0%2Brev1.prod/logo.svg" alt="raspberrypi4-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 4 Model B</td>
+</tr>
+</table>
 
 This project is inspired by and has borrowed code from the following repos and forum threads:  
 
@@ -20,9 +41,11 @@ We'll build the receiver using the parts that are outlined on the Flightradar24 
 - https://www.flightradar24.com/build-your-own
 - https://flightaware.com/adsb/piaware/build.
 
-If you wish to keep the setup as cheap as possible, you can use a Raspberry Pi Zero rather than the described Raspberry Pi 3 B+. The Raspberry Pi Zero comes without ethernet, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. Keep in mind that the Zero is less powerful than the 3 B+. If you plan to run a lot of services simultaneously, you should probably go all-in on the 3 B+.
+These sites suggest the Raspberry Pi 3 Model B+ as the preferred device, but this project runs on all the devices mentioned above. Still, if you plan to run a lot of services simultaneously, you should probably go for the Raspberry Pi 3 Model B+, the even more powerful Raspberry Pi 4 Model B, an Intel NUC, or the balenaFin.
 
-In addition to the Pi, you will need an RTL-SDR compatible USB dongle. The dongles are based on a digital television tuner, and numerous types will work – both generic TV sticks and specialized ADS-B sticks (produced by FlightAware). Although both options work, the ADS-B sticks seem to perform a little better.
+Please note that the Raspberry Pi Zero comes without ethernet and WiFi, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. The Raspberry Pi Zero comes with WiFi only.
+
+In addition to the device, you will need an RTL-SDR compatible USB dongle. The dongles are based on a digital television tuner, and numerous types will work – both generic TV sticks and specialized ADS-B sticks (produced by FlightAware). Although both options work, the ADS-B sticks seem to perform a little better.
 
 ## Part 2 – Setup balena and configure the device
 
@@ -32,7 +55,7 @@ or
 
  1. [Create a free balena account](https://dashboard.balena-cloud.com/signup). During the process, you will be asked to upload your public SSH key. If you don't have a public SSH key yet, you can [create one](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
  2. Sign in to Balena and head over to the [*Applications*](https://dashboard.balena-cloud.com/apps) panel.
- 3. Create an application with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your receiver. I have tested this code with Raspberry Pi Zero and Raspberry Pi 3 B+, and both work well. If you want to use WiFi, specify the SSID and password here, too. (If your device comes up without an active connection to the Internet, the `wifi-connect` container will create a network with a captive portal to connect to a local WiFi network. The SSID for the created hotspot is `balenaWiFi`, and the password is`balenaWiFi`. When connected, visit `http://192.168.42.1:8181/` in your web browser to setup the connection.
+ 3. Create an application with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your device. If you want to use WiFi (and your device supports it), specify the SSID and password here, too. (If your device comes up without an active connection to the Internet, the `wifi-connect` container will create a network with a captive portal to connect to a local WiFi network. The SSID for the created hotspot is `balenaWiFi`, and the password is`balenaWiFi`. When connected, visit `http://192.168.42.1:8181/` in your web browser to setup the connection.
  4. balena will create an SD card image for you, and this will start downloading automatically after a few seconds. Flash the image to an SD-card using balena's dedicated tool [balenaEtcher](https://www.balena.io/etcher/).
  5. Insert the SD card in your receiver, and connect it to your cabled network (unless you plan to use WiFi only, and configured that in step 3). 
  6. Power up the receiver.
@@ -71,7 +94,7 @@ or
 			             <'
 
 </pre>
- 15. Wait a few moments while the Docker containers are deployed and installed on your Raspberry Pi. The groundwork is now done – good job!
+ 15. Wait a few moments while the Docker containers are deployed and installed on your device. The groundwork is now done – good job!
 
 
 ## Part 3 – Configure FlightAware
@@ -151,13 +174,35 @@ If you have not previously set up a Plane Finder receiver that you want to reuse
  6. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
  7. On your device's page in the balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
 
-## Part 6 – Exploring flight traffic locally on your device
+## Part 6 – Configure OpenSky Network
+### Alternative A: Port an existing OpenSky Network receiver
+If you have previously set up a OpenSky Network receiver and want to port it to balena, you only have to do the following steps:
+
+ 1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*.
+ 2. Add a variable named `OPENSKY_USERNAME` and paste your OpenSky Network username, e.g. `JohnDoe123`. You can find your username on your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* page.
+ 3. Add a variable named `OPENSKY_SERIAL` and paste the value of your existing OpenSky Network serial number, e.g. `1663421823`. You can find your serial your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* page.
+ 4. On your device's page in the balena dashboard, restart the *opensky-network* application under *Services* by clicking the "cycle" icon next to the service name.
+
+### Alternative B: Setup a new OpenSky Network receiver
+If you have not previously set up a OpenSky Network receiver that you want to reuse, do the following steps:
+
+ 1. Register a new [OpenSky Network account](https://opensky-network.org/index.php?option=com_users&view=registration). Make sure to activate it using the email that's sent to you. Take note of your username, you will need it soon.
+ 2. Head back to your device's page on the balena dashboard. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named `OPENSKY_USERNAME` and populate it with your newly created OpenSky Username, e.g.  `JohnDoe123`.
+ 3. Head back to your device's *Summary* page. Restart the *opensky-network* application under *Services* by clicking the "cycle" icon next to the service name. Wait for the service to finish restarting.
+ 4. Inside the *Terminal* section, click *Select a target*, then *opensky-network*, and finally *Start terminal session*.
+ 5. This will open a terminal which lets you interact directly with your OpenSky Network container.
+ 6. Once the terminal prompt appears, enter `/getserial.sh` (including the leading slash), then press return.
+ 7. If everything goes according to plan, your OpenSky Network serial number will soon appear. Copy it.
+ 8. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named  `OPENSKY_SERIAL`  and paste the value from the previous step, e.g.  `1267385439`.
+ 9. Go back to your device's *Summary* page. Restart the  _opensky-network_  application under  _Services_  by clicking the “cycle” icon next to the service name.
+ 10. Head over to your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* and verify that your receiver shows up and feeds data.
+
+## Part 7 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
 When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
 
 Away from your local network but still eager to know what planes are cruising over your home? Here, balena's builtin *Public Device URL* comes in handy. Open your device page in balena console and locate the `PUBLIC DEVICE URL` header, and flip the switch below to enable it. Finally, click on the arrow icon next to the button, add the desired URL postfix specified below and voila – you should see what's going on in your area.
-
 
  **Dump1090's Radar View**
 This view visualizes everything that your receiver sees, including multilaterated plane positions. When you are in your local network, head to `YOURIP:8080` to check it out. When remote, open balena's *Public Device URL* and add `/dump1090-fa/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/dump1090-fa/`
@@ -165,11 +210,10 @@ This view visualizes everything that your receiver sees, including multilaterate
 **Plane Finder's Radar View**
 It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice viewing options. Head to `YOURIP:30053` to check it out. When remote, open balena's *Public Device URL* and add `/planefinder/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/planefinder/`
 
-
 **Flightradar24 Status Page**
 Less visual than the two other options, Flightradar24's status page gives you high level statistics and a metrics about how your feeder is doing. Head to `YOURIP:8754` to check it out. When remote, open balena's *Public Device URL* and add `/fr24feed/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/fr24feed/`
 
-## Part 7 - (Optional) Add a digital display
+## Part 8 - (Optional) Add a digital display
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. Ensure you have cloned this repository recursively (`git clone --recursive {{repository URL}}`). We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port are one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
 
 Enjoy!

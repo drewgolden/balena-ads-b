@@ -1,0 +1,2 @@
+[DEVICE]
+Serial=${OPENSKY_SERIAL}

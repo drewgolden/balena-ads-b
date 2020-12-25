@@ -115,3 +115,11 @@ services:
       - "traefik.http.middlewares.planefinder-redirect.redirectregex.replacement=/planefinder/"
       - "traefik.http.middlewares.planefinder-redirect.redirectregex.permanent=true"
       - "traefik.http.middlewares.planefinder-stripprefix.stripprefix.prefixes=/planefinder"
+  opensky-network:
+    depends_on:
+      - dump1090-fa
+    build: ./opensky-network
+    image: opensky-network
+    environment:
+      - OPENSKY_USERNAME=
+      - OPENSKY_SERIAL=
