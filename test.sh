@@ -45,3 +45,4 @@ set -m
  
 # Wait for any services to exit
 wait -n
+

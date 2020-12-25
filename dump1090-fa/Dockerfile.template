@@ -7,7 +7,7 @@ ENV DUMP1090_VERSION=v4.0
 
 RUN apt-get update && \
 	apt-get install -y git build-essential debhelper \
-	pkg-config dh-systemd && \
+	pkg-config dh-systemd tini && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
@@ -26,10 +26,8 @@ RUN git clone https://github.com/flightaware/dump1090 && \
 	dpkg -i dump1090-fa_*.deb && \
 	rm -rf /tmp/*
 
-RUN mkdir -p /run/dump1090-fa
-
 COPY start.sh /
 
 RUN chmod +x /start.sh
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
