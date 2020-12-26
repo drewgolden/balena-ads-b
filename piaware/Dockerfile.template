@@ -8,7 +8,7 @@ ENV RECEIVER_PORT 30005
 ENV RECEIVER_MLAT_PORT 30104
 
 RUN apt-get update && \ 
-	apt-get install -y git build-essential debhelper \
+	apt-get install -y git build-essential debhelper tini \
 	dh-systemd libssl-dev tcl-dev chrpath wget && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -52,4 +52,4 @@ COPY start.sh /
 
 RUN chmod +x /start.sh
 
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

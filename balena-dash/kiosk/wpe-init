@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# Check if service has been disabled through the DISABLED_SERVICES environment variable.
+
+if [[ ",$DISABLED_SERVICES," =~ ",$BALENA_SERVICE_NAME," ]]; then
+        echo "$BALENA_SERVICE_NAME is manually disabled."
+        sleep infinity
+fi
+
 if [ "$(vcgencmd get_mem gpu | grep -o '[0-9]\+')" -lt 128 ]
   then
     echo -e "\033[91mWARNING: GPU MEMORY TOO LOW"

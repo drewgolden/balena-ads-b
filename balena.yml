@@ -11,10 +11,10 @@ data:
   description: "Track the flight traffic over your head with a Raspberry Pi running balena and a cheap RTL-SDR USB dongle."
   applicationConfigVariables:
     - RESIN_HOST_CONFIG_gpu_mem: 128
+    – DISABLED_SERVICES:
   defaultDeviceType: "raspberrypi3"
   supportedDeviceTypes:
     - "raspberry-pi"
     - "raspberrypi3"
     - "raspberrypi4-64"
     - "fincm3"
-    - "intel-nuc"

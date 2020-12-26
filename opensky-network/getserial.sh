@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+set -e
 
 # Verify that all the required varibles are set before starting up the application.
 
