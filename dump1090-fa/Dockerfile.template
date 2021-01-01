@@ -4,6 +4,7 @@ LABEL maintainer="https://github.com/ketilmo"
 EXPOSE 30001 30002 30003 30004 30005 30104 8080
 
 ENV DUMP1090_VERSION=v4.0
+ENV DUMP1090_DEVICE=0
 
 RUN apt-get update && \
 	apt-get install -y git build-essential debhelper \
