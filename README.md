@@ -4,7 +4,7 @@
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), and [OpenSky Network](https://opensky-network.org/). In return, you will receive free premium accounts worth several hundred dollars/year!
 
-👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter<</a> to stay updated on the latest development of balena ADS-B Flight Tracker.&nbsp;👈🏻 
+👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a> to stay updated on the latest development of balena ADS-B Flight Tracker.&nbsp;👈🏻 
 
 **Supported devices**
 <table>
