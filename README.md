@@ -1,8 +1,8 @@
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, PlaneFinder, and OpenSky Network.**
+**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, PlaneFinder, OpenSky Network, and AirNav RadarBox.**
 
-Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), and [OpenSky Network](https://opensky-network.org/). In return, you will receive free premium accounts worth several hundred dollars/year!
+Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), and [AirNav RadarBox](https://www.radarbox.com/). In return, you will receive free premium accounts worth several hundred dollars/year!
 
 👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a> to stay updated on the latest development of balena ADS-B Flight Tracker.&nbsp;👈🏻 
 
@@ -32,13 +32,14 @@ This project is inspired by and has borrowed code from the following repos and f
 
  - https://github.com/compujuckel/adsb-docker
  - https://bitbucket.org/inodes/resin-docker-rtlsdr
+ - https://github.com/wercsy/balena-ads-b
  - [https://discussions.flightaware.com/](https://discussions.flightaware.com/t/howto-install-piaware-4-0-on-debian-10-amd64-ubuntu-20-amd64-kali-2020-amd64-on-pc/69753/3)
 
-Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), and [abcd567a](https://github.com/abcd567a) for sharing!
+Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), and [abcd567a](https://github.com/abcd567a) for sharing!
 
 ## Part 1 – Build the receiver
 
-We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware and RadarBox websites: 
+We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware, and RadarBox websites: 
 - https://www.flightradar24.com/build-your-own
 - https://flightaware.com/adsb/piaware/build
 - https://www.radarbox24.com/raspberry-pi
@@ -203,21 +204,22 @@ If you have not previously set up a OpenSky Network receiver that you want to re
 ### Alternative A: Port an existing RadarBox receiver
 If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
 
- 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RB24_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1` and a variable named `RB24_STN` with a similar value like this: `EXTRPI000000`. The key is located in the RadarBox config file, which is usually found here: `/etc/rbfeeder.ini`. You can find your key at AirNav RadarBox's *[Account](https://www.radarbox24.com/)*
+ 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RADARBOX_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1` and a variable named `RADARBOX_STATION_ID` with a similar value like this: `EXTRPI000000`. The key is located in the RadarBox config file, which is usually found here: `/etc/rbfeeder.ini`. You can find your key at AirNav RadarBox's *[Account](https://www.radarbox24.com/)*
  2. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new RadarBox receiver
 If you have not previously set up a RadarBox receiver that you want to reuse, do the following steps:
 
- 1. Head back to your device's page on the Balena dashboard.
- 2. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
- 3. This will open a terminal which lets you interact directly with your RadarBox container.
- 4. At the prompt, enter `rbfeeder`.
- 5. A summary of your settings will be displayed. Find the line with key like this `546b69e69b4671a742b82b10c674cdc1`
- 6. Please insert your sharing key under your *[Account](https://www.radarbox24.com/raspberry-pi/claim)*
- 7. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RB24_KEY` and paste the value from the previous step, e.g. `546b69e69b4671a742b82b10c674cdc1` and add a variable named `RB24_STN` with a similar value like this, which is your station id: `EXTRPI000000`.
- 8. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
- 9. As soon as your receiver starts receiving data, you will receive an e-mail from RadarBox containing your login credentials. 
+ 1. Register a new [RadarBox account](https://www.radarbox.com/register). Make sure to activate it using the email that's sent to you.
+ 2. Head back to your device's page on the Balena dashboard.
+ 3. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
+ 4. This will open a terminal which lets you interact directly with your RadarBox container.
+ 5. At the prompt, enter `rbfeeder`.
+ 6. A summary of your settings will be displayed. Find the line with a key like this `546b69e69b4671a742b82b10c674cdc1`. This is your sharing key.
+ 7. Please insert your sharing key under your *[RadarBox Account](https://www.radarbox24.com/raspberry-pi/claim)*
+ 8. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from the previous step, e.g. `546b69e69b4671a742b82b10c674cdc1` and add a variable named `RADARBOX_STATION_ID` with a similar value like this, which is your station id: `EXTRPI000000`.
+ 9. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 10. As soon as your receiver starts receiving data, you will receive an e-mail from RadarBox containing your login credentials. 
 
 ## Part 8 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?

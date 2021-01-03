@@ -160,12 +160,14 @@ services:
   rb24feed:
     depends_on:
       - dump1090-fa
-    build: ./rb24feed
-    image: rb24feed
+    build: ./radarbox
+    image: radarbox
     restart: always
+    ports:
+      - "8755:8754"
     environment:
-      - RB24_KEY=
-      - RB24_STN=
+      - RADARBOX_KEY=
+      - RADARBOX_STATION_ID=
       - LAT=
       - LON=
       - ALT=
