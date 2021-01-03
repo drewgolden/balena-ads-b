@@ -157,17 +157,18 @@ services:
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
-  radarbox:
-    depends_on:
-      - dump1090-fa
-    build: ./radarbox
-    image: radarbox
-    restart: always
-    environment:
-      - RADARBOX_KEY=
-      - LAT=
-      - LON=
-      - ALT=
+# Optional: Uncomment to enable RadarBox.
+#  radarbox:
+#    depends_on:
+#      - dump1090-fa
+#    build: ./radarbox
+#    image: radarbox
+#    restart: always
+#    environment:
+#      - RADARBOX_KEY=
+#      - LAT=
+#      - LON=
+#      - ALT=
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:
