@@ -38,9 +38,10 @@ Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https:
 
 ## Part 1 – Build the receiver
 
-We'll build the receiver using the parts that are outlined on the Flightradar24 and FlightAware websites: 
+We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware and RadarBox websites: 
 - https://www.flightradar24.com/build-your-own
-- https://flightaware.com/adsb/piaware/build.
+- https://flightaware.com/adsb/piaware/build
+- https://www.radarbox24.com/raspberry-pi
 
 These sites suggest the Raspberry Pi 3 Model B+ as the preferred device, but this project runs on all the devices mentioned above. Still, if you plan to run a lot of services simultaneously, you should probably go for the Raspberry Pi 3 Model B+, the even more powerful Raspberry Pi 4 Model B, an Intel NUC, or the balenaFin.
 
@@ -146,8 +147,8 @@ If you have not previously set up a FlightRadar24 receiver that you want to reus
  13. Under connection type, choose `1` for network connection.
  14. When asked for your receiver's IP address/hostname, enter `dump1090-fa`.
  15. Next, enter the data port number: `30005`.
- 16. Type `yes` to enable the RAW data feed on port 30334.
- 17. Type `yes` to enable the Basestation data feed on port 30003.
+ 16. Type `no` to disable the RAW data feed on port 30334.
+ 17. Type `no` to disable the Basestation data feed on port 30003.
  18. Enter `0` to disable log file writing.
  19. When asked for a log file path, just hit return.
  20. The configuration will now be submitted, and you are redirected back to the terminal.
@@ -172,8 +173,8 @@ If you have not previously set up a Plane Finder receiver that you want to reuse
  3. Open the file `SharecodeGenerator.html` in your web browser.
  4. Fill in the form to generate a Plane Finder share code. Use the same email address as you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds, it should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
  5. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
- 6. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
- 7. On your device's page in the balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
+ 6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
+ 7. On your device's page in the Balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
 
 ## Part 6 – Configure OpenSky Network
 ### Alternative A: Port an existing OpenSky Network receiver
@@ -198,7 +199,27 @@ If you have not previously set up a OpenSky Network receiver that you want to re
  9. Go back to your device's *Summary* page. Restart the  _opensky-network_  application under  _Services_  by clicking the “cycle” icon next to the service name.
  10. Head over to your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* and verify that your receiver shows up and feeds data.
 
-## Part 7 – Exploring flight traffic locally on your device
+## Part 7 – Configure RadarBox
+### Alternative A: Port an existing RadarBox receiver
+If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
+
+ 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RB24_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1` and a variable named `RB24_STN` with a similar value like this: `EXTRPI000000`. The key is located in the RadarBox config file, which is usually found here: `/etc/rbfeeder.ini`. You can find your key at AirNav RadarBox's *[Account](https://www.radarbox24.com/)*
+ 2. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+
+### Alternative B: Setup a new RadarBox receiver
+If you have not previously set up a RadarBox receiver that you want to reuse, do the following steps:
+
+ 1. Head back to your device's page on the Balena dashboard.
+ 2. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
+ 3. This will open a terminal which lets you interact directly with your RadarBox container.
+ 4. At the prompt, enter `rbfeeder`.
+ 5. A summary of your settings will be displayed. Find the line with key like this `546b69e69b4671a742b82b10c674cdc1`
+ 6. Please insert your sharing key under your *[Account](https://www.radarbox24.com/raspberry-pi/claim)*
+ 7. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RB24_KEY` and paste the value from the previous step, e.g. `546b69e69b4671a742b82b10c674cdc1` and add a variable named `RB24_STN` with a similar value like this, which is your station id: `EXTRPI000000`.
+ 8. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 9. As soon as your receiver starts receiving data, you will receive an e-mail from RadarBox containing your login credentials. 
+
+## Part 8 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
 When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
@@ -214,7 +235,7 @@ It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice 
 **Flightradar24 Status Page**
 Less visual than the two other options, Flightradar24's status page gives you high level statistics and a metrics about how your feeder is doing. Head to `YOURIP:8754` to check it out. When remote, open balena's *Public Device URL* and add `/fr24feed/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/fr24feed/`
 
-## Part 8 - (Optional) Add a digital display
+## Part 9 - (Optional) Add a digital display
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. Ensure you have cloned this repository recursively (`git clone --recursive {{repository URL}}`). We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port are one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
 
 Enjoy!

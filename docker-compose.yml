@@ -47,7 +47,9 @@ services:
       - "30003"
       - "30004"
       - "30005"
+      - "30102"
       - "30104"
+      - "30105"
       - "8080"
     ports:
       - "8080:8080"
@@ -155,6 +157,18 @@ services:
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
+  rb24feed:
+    depends_on:
+      - dump1090-fa
+    build: ./rb24feed
+    image: rb24feed
+    restart: always
+    environment:
+      - RB24_KEY=
+      - RB24_STN=
+      - LAT=
+      - LON=
+      - ALT=
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:
@@ -167,3 +181,4 @@ services:
 #      - LON=
 #      - ALT=
 #      - MLAT_CLIENT_USER=
+
