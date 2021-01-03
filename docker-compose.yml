@@ -27,6 +27,7 @@ services:
   frontend-proxy:
     image: traefik
     build: ./traefik
+    restart: always
     ports:
       - "80:80"
     labels:
@@ -34,6 +35,7 @@ services:
   dump1090-fa:
     build: ./dump1090-fa
     image: dump1090-fa
+    restart: always
     environment:
       - LAT=
       - LON=
@@ -56,18 +58,46 @@ services:
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa$$"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/dump1090-fa/"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.permanent=true"
+# Optional: Uncomment to enable dump978 UAT tracking (USA only).
+#  dump978-fa:
+#    build: ./dump978-fa
+#    image: dump978-fa
+#    restart: always
+#    environment:
+#      - LAT=
+#      - LON=
+#      - DUMP978_DEVICE=00000978
+#      - DUMP978_ENABLED=false
+#    devices:
+#      - "/dev/bus/usb"
+#    expose:
+#      - "30978"
+#      - "30979"
+#      - "8978"
+#    ports:
+#      - 8978:8978
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.dump978-fa.rule=PathPrefix(`/skyaware978`)"
+#      - "traefik.http.routers.dump978-fa.middlewares=dump978-fa-redirect"
+#      - "traefik.http.middlewares.dump978-fa-redirect.redirectregex.regex=^.*/skyaware978$$"
+#      - "traefik.http.middlewares.dump978-fa-redirect.redirectregex.replacement=/skyaware978/"
+#      - "traefik.http.middlewares.dump978-fa-redirect.redirectregex.permanent=true"
   piaware:
     depends_on:
       - dump1090-fa
     build: ./piaware
     image: piaware
+    restart: always
     environment:
       - FLIGHTAWARE_FEEDER_ID=
+      - DUMP978_ENABLED=false
   fr24feed:
     depends_on:
       - dump1090-fa
     build: ./fr24feed
     image: fr24feed
+    restart: always
     ports:
       - "8754:8754"
     environment:
@@ -94,6 +124,7 @@ services:
       - dump1090-fa
     build: ./planefinder
     image: planefinder
+    restart: always
     ports:
       - "30053:30053"
     labels:
@@ -120,6 +151,19 @@ services:
       - dump1090-fa
     build: ./opensky-network
     image: opensky-network
+    restart: always
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
+# Optional: Uncomment to enable custom mlat server.
+#  mlat-client:
+#    depends_on:
+#      - dump1090-fa
+#    build: ./mlat-client
+#    image: mlat-client
+#    restart: always
+#    environment:
+#      - LAT=
+#      - LON=
+#      - ALT=
+#      - MLAT_CLIENT_USER=

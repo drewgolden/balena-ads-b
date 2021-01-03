@@ -41,10 +41,24 @@ echo " "
 # Variables are verified – continue with startup procedure.
 
 # Configure piaware according to environment variables.
+/usr/bin/piaware-config allow-auto-updates no
+/usr/bin/piaware-config allow-manual-updates no
+/usr/bin/piaware-config	allow-mlat yes
+/usr/bin/piaware-config mlat-results yes
 /usr/bin/piaware-config mlat-results-format "beast,connect,${RECEIVER_HOST}:${RECEIVER_MLAT_PORT} beast,listen,30105 ext_basestation,listen,30106"
 /usr/bin/piaware-config receiver-type other
 /usr/bin/piaware-config receiver-host "${RECEIVER_HOST}"
 /usr/bin/piaware-config receiver-port "${RECEIVER_PORT}"
+
+# If dump978-fa is disabled through config, disable it in piaware.
+if [[ "$DUMP978_ENABLED" = "true" ]]; then
+	/usr/bin/piaware-config uat-receiver-type other
+    /usr/bin/piaware-config uat-receiver-host dump978-fa
+    /usr/bin/piaware-config uat-receiver-port 30978
+else
+	/usr/bin/piaware-config uat-receiver-type none
+
+fi
 
 # Add FlightAware Feeder ID if present.
 if [ -n "${FLIGHTAWARE_FEEDER_ID}" ]; then

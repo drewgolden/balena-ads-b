@@ -1,0 +1,39 @@
+FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+LABEL maintainer="https://github.com/ketilmo"
+
+EXPOSE 30978 30979 8978
+
+ENV DUMP978_VERSION=v4.0
+ENV DUMP978_DEVICE=00000978
+ENV DUMP978_ENABLED=false
+
+RUN apt-get update && \
+	apt-get install -y git build-essential debhelper \
+	pkg-config dh-systemd tini && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+	apt-get install -y libboost-system-dev libboost-program-options-dev \
+	libboost-regex-dev libboost-filesystem-dev libsoapysdr-dev \
+	lighttpd soapysdr-module-rtlsdr rtl-sdr && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+
+RUN git clone https://github.com/flightaware/dump978 && \
+	cd dump978 && \
+	git checkout tags/${DUMP978_VERSION} && \
+	dpkg-buildpackage -b --no-sign && \
+	cd .. && \
+	sudo dpkg -i dump978-fa_*.deb skyaware978_*.deb && \
+	rm -rf /tmp/*
+
+RUN mkdir -p /run/dump978-fa
+RUN mkdir -p /run/skyaware978
+COPY start.sh /
+COPY add-serial-978.sh /
+
+RUN chmod +x /start.sh
+RUN chmod +x /add-serial-978.sh
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

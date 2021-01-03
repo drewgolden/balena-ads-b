@@ -14,7 +14,7 @@ RUN apt-get update && \
 RUN apt-get update && \
 	apt-get install -y librtlsdr-dev libncurses5-dev \
 	lighttpd libbladerf-dev libhackrf-dev \
-	liblimesuite-dev && \
+	liblimesuite-dev rtl-sdr && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
@@ -29,7 +29,9 @@ RUN git clone https://github.com/flightaware/dump1090 && \
 
 RUN mkdir -p /run/dump1090-fa
 COPY start.sh /
+COPY add-serial-1090.sh /
 
 RUN chmod +x /start.sh
+RUN chmod +x /add-serial-1090.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

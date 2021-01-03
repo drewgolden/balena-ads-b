@@ -1,11 +1,14 @@
 FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 LABEL maintainer="https://github.com/ketilmo"
 
+EXPOSE 30105 30106
+
 ENV PIAWARE_VERSION=v4.0
 ENV FLIGHTAWARE_FEEDER_ID=
 ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005
 ENV RECEIVER_MLAT_PORT 30104
+ENV DUMP978_ENABLED=false
 
 RUN apt-get update && \ 
 	apt-get install -y git build-essential debhelper tini \
@@ -42,9 +45,6 @@ RUN git clone http://github.com/flightaware/piaware_builder && \
 	cd .. && \
 	dpkg -i piaware_*.deb && \
 	rm -rf /tmp/*
-
-RUN piaware-config allow-auto-updates yes && \
-    piaware-config allow-manual-updates yes
 
 RUN mkdir -p /run/piaware
 
