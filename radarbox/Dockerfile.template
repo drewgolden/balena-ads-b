@@ -1,35 +1,43 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 LABEL maintainer="https://github.com/ketilmo"
 
-EXPOSE 8754
-
 ENV RADARBOX_KEY=
-ENV RADARBOX_STATION_ID=
 ENV LAT=
 ENV LON=
 ENV ALT=
+ENV MLAT_CLIENT_VERSION=v0.2.11
 ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005
 
 RUN apt-get update && \
-	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https
+	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https tini
 
 WORKDIR /tmp
+
 # Import GPG key for the APT repository
+
 RUN mkdir ~/.gnupg && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 1D043681
 RUN gpg --armor --export 1D043681 | sudo apt-key add -
+
 # Add APT repository to the config file, removing older entries if exist
+
 RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
     grep -v rbfeeder /etc/apt/sources.list.bak > /etc/apt/sources.list && \
     echo 'deb https://apt.rb24.com/ rpi-stable main' > /etc/apt/sources.list.d/rb24.list
+    
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    rbfeeder
+    rbfeeder gettext-base
 
-RUN apt-get install mlat-client -y
+RUN apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers && \
+	apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && \
-	apt-get install -y supervisor gettext-base
+RUN git clone --recursive https://github.com/mutability/mlat-client.git && \
+	cd mlat-client && \
+	git checkout tags/${MLAT_CLIENT_VERSION} && \
+	dpkg-buildpackage -b -uc && \
+	dpkg -i ../mlat-client_*_*.deb && \
+	rm -rf /tmp/*
 
 COPY start.sh /
 RUN chmod +x /start.sh

@@ -18,6 +18,7 @@ missing_variables=false
 
 # Begin defining all the required configuration variables.
 
+[ -z "$RADARBOX_KEY" ] && echo "RadarBox key latitude is missing, fetching from server." || echo "RadarBox key latitude is set: $RADARBOX_KEY"
 [ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
 [ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
 [ -z "$ALT" ] && echo "Receiver altitude is missing, will abort startup." && missing_variables=true || echo "Receiver altitude is set: $ALT"

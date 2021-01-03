@@ -157,17 +157,14 @@ services:
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
-  rb24feed:
+  radarbox:
     depends_on:
       - dump1090-fa
     build: ./radarbox
     image: radarbox
     restart: always
-    ports:
-      - "8755:8754"
     environment:
       - RADARBOX_KEY=
-      - RADARBOX_STATION_ID=
       - LAT=
       - LON=
       - ALT=

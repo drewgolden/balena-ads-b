@@ -11,7 +11,7 @@ ENV RECEIVER_PORT=30005
 ENV MLAT_CLIENT_VERSION=v0.2.11
 
 RUN apt-get update && \
-	apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers supervisor tini && \
+	apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers tini && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git clone --recursive https://github.com/mutability/mlat-client.git && \

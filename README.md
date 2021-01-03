@@ -1,3 +1,4 @@
+
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
 **ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, PlaneFinder, OpenSky Network, and AirNav RadarBox.**
@@ -201,10 +202,11 @@ If you have not previously set up a OpenSky Network receiver that you want to re
  10. Head over to your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* and verify that your receiver shows up and feeds data.
 
 ## Part 7 – Configure RadarBox
+*RadarBox only works on Raspberry Pis currently, and has thus been disabled by default. To enable it, clone this repo and uncomment the RadarBox configuration in `docker-compose.yml` before deploying to balena.*
 ### Alternative A: Port an existing RadarBox receiver
 If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
 
- 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RADARBOX_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1` and a variable named `RADARBOX_STATION_ID` with a similar value like this: `EXTRPI000000`. The key is located in the RadarBox config file, which is usually found here: `/etc/rbfeeder.ini`. You can find your key at AirNav RadarBox's *[Account](https://www.radarbox24.com/)*
+ 1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RADARBOX_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1`. To get your key, issue the following command at your current RadarBox device: `sudo rbfeeder --showkey --no-start`.
  2. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new RadarBox receiver
@@ -214,12 +216,12 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
  2. Head back to your device's page on the Balena dashboard.
  3. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
  4. This will open a terminal which lets you interact directly with your RadarBox container.
- 5. At the prompt, enter `rbfeeder`.
- 6. A summary of your settings will be displayed. Find the line with a key like this `546b69e69b4671a742b82b10c674cdc1`. This is your sharing key.
- 7. Please insert your sharing key under your *[RadarBox Account](https://www.radarbox24.com/raspberry-pi/claim)*
- 8. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from the previous step, e.g. `546b69e69b4671a742b82b10c674cdc1` and add a variable named `RADARBOX_STATION_ID` with a similar value like this, which is your station id: `EXTRPI000000`.
+ 5. At the prompt, enter `rbfeeder --showkey --no-start`. Your RadarBox key will be displayed, and will look similar to this: `546b69e69b4671a742b82b10c674cdc1`.
+ 6.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page and insert your sharing key in the input field named *Sharing Key.*
+ 7. If you are asked to enter your feeder's location and altitude, enter the same values that you entered in the `LAT`, `LON`, and `ALT` environment variables earlier.
+ 8. Head back to your device's page on the Balena dashboard. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
  9. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
- 10. As soon as your receiver starts receiving data, you will receive an e-mail from RadarBox containing your login credentials. 
+ 10. Return over to the [RadarBox](https://www.radarbox.com/) website. Click the *Account* button, click stations, and find your station in the list. Verify that you data is received.
 
 ## Part 8 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?

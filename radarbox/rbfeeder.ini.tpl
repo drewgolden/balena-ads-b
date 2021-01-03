@@ -1,7 +1,6 @@
 [client]
 network_mode=true
 key=${RADARBOX_KEY}
-stn=${RADARBOX_STATION_ID}
 lat=${LAT}
 lon=${LON}
 alt=${ALT}
