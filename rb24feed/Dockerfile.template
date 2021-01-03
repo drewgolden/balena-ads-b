@@ -1,0 +1,34 @@
+FROM balenalib/%%BALENA_ARCH%%-debian:stretch as run
+
+EXPOSE 8754
+
+RUN apt-get update && \
+	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https
+
+WORKDIR /tmp
+# Import GPG key for the APT repository
+RUN mkdir ~/.gnupg && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
+RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 1D043681
+RUN gpg --armor --export 1D043681 | sudo apt-key add -
+# Add APT repository to the config file, removing older entries if exist
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
+    grep -v rbfeeder /etc/apt/sources.list.bak > /etc/apt/sources.list && \
+    echo 'deb https://apt.rb24.com/ rpi-stable main' > /etc/apt/sources.list.d/rb24.list
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    rbfeeder
+
+ENV RECEIVER_HOST dump1090-fa
+ENV RECEIVER_PORT 30005
+
+RUN apt-get install mlat-client -y
+
+RUN apt-get update && \
+	apt-get install -y supervisor gettext-base
+
+COPY start.sh /
+RUN chmod +x /start.sh
+
+COPY supervisor /etc/supervisor
+COPY rbfeeder.ini.tpl /etc
+
+ENTRYPOINT ["/start.sh"]

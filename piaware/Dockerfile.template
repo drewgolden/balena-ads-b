@@ -12,7 +12,7 @@ ENV DUMP978_ENABLED=false
 
 RUN apt-get update && \ 
 	apt-get install -y git build-essential debhelper tini \
-	dh-systemd libssl-dev tcl-dev chrpath wget && \
+	dh-systemd libssl-dev tcl-dev chrpath wget apt-transport-https && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
