@@ -10,24 +10,9 @@ ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005
 
 RUN apt-get update && \
-	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https tini
+	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https tini gettext-base
 
 WORKDIR /tmp
-
-# Import GPG key for the APT repository
-
-RUN mkdir ~/.gnupg && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf
-RUN gpg --keyserver pool.sks-keyservers.net --recv-keys 1D043681
-RUN gpg --armor --export 1D043681 | sudo apt-key add -
-
-# Add APT repository to the config file, removing older entries if exist
-
-RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak && \
-    grep -v rbfeeder /etc/apt/sources.list.bak > /etc/apt/sources.list && \
-    echo 'deb https://apt.rb24.com/ rpi-stable main' > /etc/apt/sources.list.d/rb24.list
-    
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    rbfeeder gettext-base
 
 RUN apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -39,9 +24,16 @@ RUN git clone --recursive https://github.com/mutability/mlat-client.git && \
 	dpkg -i ../mlat-client_*_*.deb && \
 	rm -rf /tmp/*
 
+COPY radarbox_installer.sh /tmp
+RUN chmod +x /tmp/radarbox_installer.sh
+RUN ./radarbox_installer.sh
+
 COPY start.sh /
 RUN chmod +x /start.sh
 
 COPY rbfeeder.ini.tpl /etc
+
+COPY showkey.sh /
+RUN chmod +x /showkey.sh
 
 ENTRYPOINT ["/start.sh"]

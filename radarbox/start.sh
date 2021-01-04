@@ -46,7 +46,16 @@ envsubst < /etc/rbfeeder.ini.tpl > /etc/rbfeeder.ini
 chmod a+rw /etc/rbfeeder.ini
 
 # Start rbfeeder and put it in the background.
-/usr/bin/rbfeeder &
+
+arch="$(dpkg --print-architecture)"
+echo System Architecture: $arch
+
+# If host architecture is i386 or amd64, run RadarBox through armhf software emulation.
+if [ "$arch" = "i386" ] || [ "$arch" = "amd64" ]; then 
+	/usr/bin/qemu-arm-static /usr/bin/rbfeeder &
+else 
+	/usr/bin/rbfeeder &
+fi
 
 # Wait for any services to exit.
 wait -n

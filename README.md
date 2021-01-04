@@ -34,16 +34,17 @@ This project is inspired by and has borrowed code from the following repos and f
  - https://github.com/compujuckel/adsb-docker
  - https://bitbucket.org/inodes/resin-docker-rtlsdr
  - https://github.com/wercsy/balena-ads-b
+ - https://github.com/mikenye/
  - [https://discussions.flightaware.com/](https://discussions.flightaware.com/t/howto-install-piaware-4-0-on-debian-10-amd64-ubuntu-20-amd64-kali-2020-amd64-on-pc/69753/3)
 
-Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), and [abcd567a](https://github.com/abcd567a) for sharing!
+Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), [mikenye](https://github.com/mikenye/), and [abcd567a](https://github.com/abcd567a) for sharing!
 
 ## Part 1 – Build the receiver
 
 We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware, and RadarBox websites: 
 - https://www.flightradar24.com/build-your-own
 - https://flightaware.com/adsb/piaware/build
-- https://www.radarbox24.com/raspberry-pi
+- https://www.radarbox.com/raspberry-pi
 
 These sites suggest the Raspberry Pi 3 Model B+ as the preferred device, but this project runs on all the devices mentioned above. Still, if you plan to run a lot of services simultaneously, you should probably go for the Raspberry Pi 3 Model B+, the even more powerful Raspberry Pi 4 Model B, an Intel NUC, or the balenaFin.
 
@@ -202,7 +203,7 @@ If you have not previously set up a OpenSky Network receiver that you want to re
  10. Head over to your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* and verify that your receiver shows up and feeds data.
 
 ## Part 7 – Configure RadarBox
-*RadarBox only works on Raspberry Pis currently, and has thus been disabled by default. To enable it, clone this repo and uncomment the RadarBox configuration in `docker-compose.yml` before deploying to balena.*
+
 ### Alternative A: Port an existing RadarBox receiver
 If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
 
@@ -216,13 +217,13 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
  2. Head back to your device's page on the Balena dashboard.
  3. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
  4. This will open a terminal which lets you interact directly with your RadarBox container.
- 5. At the prompt, enter `rbfeeder --showkey --no-start`. Your RadarBox key will be displayed, and will look similar to this: `546b69e69b4671a742b82b10c674cdc1`.
- 6.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page and insert your sharing key in the input field named *Sharing Key.*
- 7. If you are asked to enter your feeder's location and altitude, enter the same values that you entered in the `LAT`, `LON`, and `ALT` environment variables earlier.
- 8. Head back to your device's page on the Balena dashboard. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
- 9. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
- 10. Return over to the [RadarBox](https://www.radarbox.com/) website. Click the *Account* button, click stations, and find your station in the list. Verify that you data is received.
-
+ 5. At the prompt, enter `/showkey.sh`. Your RadarBox key will be displayed, and will look similar to this: `546b69e69b4671a742b82b10c674cdc1`.
+ 6. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
+ 7. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 8.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page. Locate the input field named *Sharing Key,* and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
+ 9. Next, you might be asked to enter your feeder's location and altitude *above the ground.* Enter the same values that you entered in the `LAT` and `LON` variables earlier. When asked for the antenna's altitude, specify it i meters (or feet) *above the ground* – NOT above sea level as done previously. If you are not asked to enter this information, you can do it manually by clicking the *Edit* link under your receiver's ID on the left-hand side of the screen. 
+ 10. Finally, verify that RadarBox is receiving data from your receiver. You'll find your receiver by clicking on the *Account* menu at [radarbox.com](https://www.radarbox.com) , under the *Stations* accordion. 
+ 
 ## Part 8 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 

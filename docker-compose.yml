@@ -1,6 +1,7 @@
 version: '2'
 volumes:
   settings:
+  radarbox:
 services:
   kiosk:
     restart: always
@@ -157,18 +158,21 @@ services:
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
-# Optional: Uncomment to enable RadarBox.
-#  radarbox:
-#    depends_on:
-#      - dump1090-fa
-#    build: ./radarbox
-#    image: radarbox
-#    restart: always
-#    environment:
-#      - RADARBOX_KEY=
-#      - LAT=
-#      - LON=
-#      - ALT=
+  radarbox:
+    depends_on:
+      - dump1090-fa
+    build: ./radarbox
+    image: radarbox
+    restart: always
+    environment:
+      - RADARBOX_KEY=
+      - LAT=
+      - LON=
+      - ALT=
+#Slight hack to make RadarBox run on i386 and amd64 architectures.
+    volumes:
+      - 'radarbox:/sys/class/thermal:ro'
+      - 'radarbox:/var/radarbox/thermal'
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:
