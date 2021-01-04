@@ -164,6 +164,8 @@ services:
     build: ./radarbox
     image: radarbox
     restart: always
+    expose:
+      - "32088"
     environment:
       - RADARBOX_KEY=
       - LAT=

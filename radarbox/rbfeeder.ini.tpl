@@ -12,3 +12,7 @@ external_port=${RECEIVER_PORT}
 
 [mlat]
 autostart_mlat=true
+
+[dump978]
+dump978_enabled=${DUMP978RB_ENABLED}
+dump978_port=30979

@@ -1,6 +1,8 @@
 FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
 LABEL maintainer="https://github.com/ketilmo"
 
+EXPOSE 32088
+
 ENV RADARBOX_KEY=
 ENV LAT=
 ENV LON=
@@ -10,7 +12,7 @@ ENV RECEIVER_HOST dump1090-fa
 ENV RECEIVER_PORT 30005
 
 RUN apt-get update && \
-	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https tini gettext-base
+	apt-get install -y wget dirmngr gnupg systemd libcap2-bin apt-transport-https tini gettext-base socat
 
 WORKDIR /tmp
 

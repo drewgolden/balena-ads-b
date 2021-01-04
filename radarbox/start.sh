@@ -36,6 +36,13 @@ then
         sleep infinity
 fi
 
+# If dump978-fa is enabled through config, enable it in rbfeed.
+if [[ "$DUMP978_ENABLED" = "true" ]]; then
+	export DUMP978RB_ENABLED=true
+else
+	export DUMP978RB_ENABLED=false
+fi
+
 echo "Settings verified, proceeding with startup."
 echo " "
 
@@ -49,6 +56,11 @@ chmod a+rw /etc/rbfeeder.ini
 
 arch="$(dpkg --print-architecture)"
 echo System Architecture: $arch
+
+# If dump978-fa is enabled through config, activate socat port routing.
+if [[ "$DUMP978_ENABLED" = "true" ]]; then
+	socat TCP-LISTEN:30979,fork TCP:dump978-fa:30979 &
+fi
 
 # If host architecture is i386 or amd64, run RadarBox through armhf software emulation.
 if [ "$arch" = "i386" ] || [ "$arch" = "amd64" ]; then 
