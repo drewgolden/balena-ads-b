@@ -1,24 +1,41 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 80 8080 443
 
-ENV TRAEFIK_VERSION=2.3.6
+ARG PERM_INSTALL="gettext-base tini" 
 
-RUN apt-get update && \
-	apt-get install -y wget tini && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG TRAEFIK_VERSION=2.3.6
+ARG TEMP_INSTALL="wget"
+
+COPY traefik_installer.sh /tmp
+WORKDIR /tmp
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL && \
+	chmod +x /tmp/traefik_installer.sh && \
+	./traefik_installer.sh && \
+	rm -rf traefik_installer.sh
+
+FROM base AS release
+
+COPY --from=buildstep /tmp/traefik.tar.gz /tmp/
+COPY start.sh /
 
 WORKDIR /tmp
 
-COPY traefik_installer.sh /tmp
-RUN chmod +x /tmp/traefik_installer.sh
-RUN ./traefik_installer.sh
-
-RUN ln -s /var/run/balena.sock /var/run/docker.sock
-
-COPY start.sh /
-RUN chmod +x /start.sh
+RUN tar -C /usr/bin/ -zxvf traefik.tar.gz && \
+	chmod +x /start.sh && \
+	chmod +x /usr/bin/traefik && \
+	rm -rf /tmp/* && \
+	ln -s /var/run/balena.sock /var/run/docker.sock
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
 

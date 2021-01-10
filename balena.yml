@@ -12,7 +12,7 @@ data:
   applicationConfigVariables:
     - RESIN_HOST_CONFIG_gpu_mem: 128
     – DISABLED_SERVICES:
-  defaultDeviceType: "raspberrypi4-64"
+  defaultDeviceType: "raspberrypi3"
   supportedDeviceTypes:
     - "raspberry-pi"
     - "raspberrypi3"

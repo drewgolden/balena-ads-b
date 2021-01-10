@@ -1,7 +1,6 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
 LABEL maintainer="https://github.com/ketilmo"
 
-ENV OPENSKY_VERSION=2.1.7-1
 ENV OPENSKY_USERNAME=
 ENV OPENSKY_SERIAL=
 ENV LAT=
@@ -11,24 +10,46 @@ ENV ALT=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 
-RUN apt-get update && \
-	apt-get install -y wget gettext-base perl tini && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG PERM_INSTALL="perl gettext-base tini" 
+
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG OPENSKY_VERSION=2.1.7-1
+ARG TEMP_INSTALL="wget" 
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL
 
 WORKDIR /tmp
 
 COPY opensky_installer.sh /tmp
-RUN chmod +x /tmp/opensky_installer.sh
-RUN ./opensky_installer.sh
+RUN chmod +x /tmp/opensky_installer.sh && \
+	./opensky_installer.sh
 
+FROM base AS release
+
+RUN mkdir -p /var/lib/openskyd/conf.d/ && \
+	mkdir -p /var/lib/openskyd/conf.tpl/
+
+COPY --from=buildstep /tmp/OpenSky.deb /tmp/
 COPY start.sh /
 COPY getserial.sh /
-RUN mkdir -p /var/lib/openskyd/conf.d/
-RUN mkdir -p /var/lib/openskyd/conf.tpl/
 COPY 10-debconf.conf.tpl /var/lib/openskyd/conf.tpl/
 COPY 05-serial.conf.tpl /var/lib/openskyd/conf.tpl/
 
-RUN chmod +x /start.sh
-RUN chmod +x /getserial.sh
+WORKDIR /tmp
+
+RUN dpkg --unpack OpenSky.deb && \
+	rm /var/lib/dpkg/info/opensky-feeder.postinst -f && \
+	dpkg --configure opensky-feeder && \
+	apt install -yf && \
+	chmod +x /start.sh && \
+	chmod +x /getserial.sh && \
+	rm -rf /tmp/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

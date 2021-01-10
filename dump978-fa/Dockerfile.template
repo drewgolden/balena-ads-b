@@ -1,39 +1,47 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30978 30979 8978
 
-ENV DUMP978_VERSION=v4.0
 ENV DUMP978_DEVICE=00000978
 ENV DUMP978_ENABLED=false
 
-RUN apt-get update && \
-	apt-get install -y git build-essential debhelper \
-	pkg-config dh-systemd tini && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG PERM_INSTALL="tini libboost-program-options-dev lighttpd rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.67.0 libboost-regex1.67.0 libboost-system1.67.0 " 
 
-RUN apt-get update && \
-	apt-get install -y libboost-system-dev libboost-program-options-dev \
-	libboost-regex-dev libboost-filesystem-dev libsoapysdr-dev \
-	lighttpd soapysdr-module-rtlsdr rtl-sdr && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG DUMP978_VERSION=v4.0
+ARG TEMP_INSTALL="build-essential git debhelper pkg-config libboost-system-dev libboost-regex-dev libboost-filesystem-dev libboost-program-options-dev libsoapysdr-dev dh-systemd" 
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL
 
 WORKDIR /tmp
 
 RUN git clone https://github.com/flightaware/dump978 && \
 	cd dump978 && \
 	git checkout tags/${DUMP978_VERSION} && \
-	dpkg-buildpackage -b --no-sign && \
-	cd .. && \
-	sudo dpkg -i dump978-fa_*.deb skyaware978_*.deb && \
-	rm -rf /tmp/*
+	dpkg-buildpackage -b --no-sign
 
-RUN mkdir -p /run/dump978-fa
-RUN mkdir -p /run/skyaware978
+FROM base AS release
+
+COPY --from=buildstep /tmp/dump978-fa_*.deb /tmp/
+COPY --from=buildstep /tmp/skyaware978_*.deb /tmp/
 COPY start.sh /
 COPY add-serial-978.sh /
 
-RUN chmod +x /start.sh
-RUN chmod +x /add-serial-978.sh
+WORKDIR /tmp
+
+RUN dpkg -i dump978-fa_*.deb skyaware978_*.deb && \
+	mkdir -p /run/dump978-fa && \
+	mkdir -p /run/skyaware978 && \
+	chmod +x /start.sh && \
+	chmod +x /add-serial-978.sh && \
+	rm -rf /tmp/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

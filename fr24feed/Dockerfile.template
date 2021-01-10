@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 8754
@@ -8,19 +8,34 @@ ENV FR24_KEY=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 
-RUN apt-get update && \
-	apt-get install -y wget gettext-base tini && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG PERM_INSTALL="gettext-base tini"
+
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG TEMP_INSTALL="wget"
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL
 
 WORKDIR /tmp
 
 COPY fr24feed_installer.sh /tmp
-RUN chmod +x /tmp/fr24feed_installer.sh
-RUN ./fr24feed_installer.sh
+RUN chmod +x /tmp/fr24feed_installer.sh && \ 
+	./fr24feed_installer.sh
 
+FROM base AS release
+
+COPY --from=buildstep /tmp/fr24feed /usr/bin
 COPY start.sh /
-RUN chmod +x /start.sh
-
 COPY fr24feed.ini.tpl /etc
+
+RUN chmod +x /start.sh && \
+	chmod +x /usr/bin/fr24feed && \
+	rm -rf /tmp/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

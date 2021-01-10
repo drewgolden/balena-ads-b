@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:buster as run
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 ENV LAT=
@@ -8,21 +8,36 @@ ENV MLAT_CLIENT_USER=
 ENV MLAT_SERVER=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
-ENV MLAT_CLIENT_VERSION=v0.2.11
 
-RUN apt-get update && \
-	apt-get install -y build-essential debhelper python3-dev python-distutils-extra git init-system-helpers tini && \
-	apt-get clean && rm -rf /var/lib/apt/lists/*
+ARG PERM_INSTALL="tini python3 python3.7" 
+
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG MLAT_CLIENT_VERSION=v0.2.11
+ARG TEMP_INSTALL="build-essential debhelper python3-dev python-distutils-extra git init-system-helpers" 
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL
+
+WORKDIR /tmp
 
 RUN git clone --recursive https://github.com/mutability/mlat-client.git && \
 	cd mlat-client && \
 	git checkout tags/${MLAT_CLIENT_VERSION} && \
-	dpkg-buildpackage -b -uc && \
-	dpkg -i ../mlat-client_*_*.deb && \
-	rm -rf /tmp/*
+	dpkg-buildpackage -b -uc
 
+FROM base AS release
+
+COPY --from=buildstep /tmp/mlat-client_*_*.deb /tmp/
 COPY start.sh /
 
-RUN chmod +x /start.sh
+RUN dpkg -i /tmp/mlat-client_*_*.deb && \
+	chmod +x /start.sh && \
+	rm -rf /tmp/*
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

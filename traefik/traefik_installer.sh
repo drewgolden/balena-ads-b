@@ -15,7 +15,3 @@ fi
 traefik_packet="traefik_v${TRAEFIK_VERSION}_linux_$traefik_arch.tar.gz"
 
 cd /tmp/ && wget --quiet -O traefik.tar.gz "https://github.com/containous/traefik/releases/download/v${TRAEFIK_VERSION}/$traefik_packet"; 
-
-tar -C /usr/bin/ -zxvf traefik.tar.gz && rm traefik.tar.gz
-
-chmod +x /usr/bin/traefik
