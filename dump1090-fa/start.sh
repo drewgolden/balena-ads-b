@@ -3,11 +3,10 @@ set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
 
-if [[ ",$DISABLED_SERVICES," =~ ",$BALENA_SERVICE_NAME," ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled."
         sleep infinity
 fi
-
 # Verify that all the required varibles are set before starting up the application.
 
 echo "Verifying settings..."

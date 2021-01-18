@@ -3,14 +3,14 @@ set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
 
-if [[ ",$DISABLED_SERVICES," =~ ",$BALENA_SERVICE_NAME," ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled."
         sleep infinity
 fi
 
-# Check if service has been disabled through the DUMP978_ENABLED environment variable. 
+# Check if service has been enabled through the UAT_ENABLED environment variable. 
 
-if ! [[ "$DUMP978_ENABLED" = "true" ]]; then
+if ! [[ "$UAT_ENABLED" = "true" ]]; then
         echo "$BALENA_SERVICE_NAME is not enabled."
         sleep infinity
 fi

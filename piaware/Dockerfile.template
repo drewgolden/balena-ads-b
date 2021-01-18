@@ -9,7 +9,7 @@ ENV RECEIVER_PORT 30005
 ENV RECEIVER_MLAT_PORT 30104
 ENV DUMP978_ENABLED=false
 
-ARG PERM_INSTALL="tini net-tools tclx8.4 tcllib itcl3 libboost-filesystem1.67.0 libboost-program-options1.67.0 libboost-regex1.67.0 libboost-system1.67.0 libexpat1" 
+ARG PERM_INSTALL="tini net-tools tclx8.4 tcllib itcl3 libboost-filesystem1.67.0 libboost-program-options1.67.0 libboost-regex1.67.0 libboost-system1.67.0 libexpat1 expect" 
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -49,6 +49,7 @@ FROM base AS release
 COPY --from=buildstep /tmp/tcltls-rebuild/tcl-tls_*.deb /tmp/
 COPY --from=buildstep /tmp/piaware_builder/piaware_*.deb /tmp/
 COPY start.sh /
+COPY getid.sh /
 
 WORKDIR /tmp
 
@@ -57,6 +58,7 @@ RUN dpkg -i tcl-tls_*.deb && \
 	dpkg -i piaware_*.deb && \
 	rm -rf /tmp/* && \
 	mkdir -p /run/piaware && \
-	chmod +x /start.sh
+	chmod +x /start.sh && \
+	chmod +x /getid.sh
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

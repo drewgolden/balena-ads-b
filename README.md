@@ -1,11 +1,11 @@
 
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, PiAware, Fr24Feed, PlaneFinder, OpenSky Network, and AirNav RadarBox.**
+**ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), and [AirNav RadarBox](https://www.radarbox.com/). In return, you will receive free premium accounts worth several hundred dollars/year!
 
-👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a> to stay updated on the latest development of balena ADS-B Flight Tracker.&nbsp;👈🏻 
+👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b">Subscribe to our newsletter</a>&nbsp;👈🏻 to stay updated on the latest development of balena ADS-B Flight Tracker.
 
 **Supported devices**
 <table>
@@ -112,19 +112,21 @@ If you have previously set up a standalone FlightAware receiver, and want to por
 ### Alternative B: Setup a new FlightAware receiver
 If you have not previously set up a FlightAware receiver that you want to reuse, do the following steps:
 
-
- 1. Register [a new account](https://flightaware.com/account/join/) at FlightAware: 
- 2. Login using your newly created credentials.
- 3. While being connected to the same network (either cabled or wireless) as your receiver is linked to, head to FlightAware's *[Claim Receiver](https://flightaware.com/adsb/piaware/claim)* page.
- 4. Check if any receivers show up under the *Linked PiAware Receivers* heading. (If not, wait about five minutes and click the *Check Again for my PiAware*-button.) Hopefully, your receiver is now visible under the *Linked PiAware Receivers* header.
- 5. In the left-hand-side menu on the top of the page, click the *My ADBS-B* menu item. Your device should be listed in an orange rectangle. Next, click the cogwheel icon on the right-hand side of the screen.
- 6. Click the *Configure Location*-button, and verify that the location matches the coordinates you entered earlier. If not, correct them.
- 7. Click the *Configure Height*-button, and specify the altitude of your receiver. The value should match the number you entered in the `ALT` variable in part 1.
- 8. If you don't face any bandwidth constraints, enable multilateration (MLAT). Enabling MLAT lets your receiver connect to other nearby receivers to multilaterate the positions of aircraft that does not report their position through ADS-B. This option increases the bandwidth usage a bit but gives more visible aircraft positions in return. 
- 9. Specify the other settings in the FlightAware lightbox according to your personal preferences.
- 10. Close the lightbox. Find and copy your receiver's *Unique Identifier*. It should look something like this: `134cdg7d-7533-5gd4-d31d-r31r52g63v12`.
- 11. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add the following variable: `FLIGHTAWARE_FEEDER_ID`, then paste your *Unique Identifier*, eg. `134cdg7d-7533-5gd4-d31d-r31r52g63v12`.
-
+ 1. Head back to your device's *Summary* page. Inside the *Terminal* section, click *Select a target*, then *piaware*, and finally *Start terminal session*. This will open a terminal which lets you interact directly with your PiAware container.
+ 2. Once the terminal prompt appears, enter `/getid.sh` (including the leading slash), then press return.
+ 3. If everything goes according to plan, your FlightAware feeder id will soon appear. Copy it.
+ 4. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named  `FLIGHTAWARE_FEEDER_ID`  and paste the value from the previous step, e.g.  `134cdg7d-7533-5gd4-d31d-r31r52g63v12`.
+ 5. Go back to your device's *Summary* page. Restart the  _piaware_  application under  _Services_  by clicking the “cycle” icon next to the service name.
+ 6. Register [a new account](https://flightaware.com/account/join/) at FlightAware, then login using your newly created credentials.
+ 7. **Important:** While being connected to *the same network* (either cabled or wireless) as your receiver is connected to, head to FlightAware's *[Claim Receiver](https://flightaware.com/adsb/piaware/claim)* page.
+ 8. Check if any receivers show up under the *Linked PiAware Receivers* heading. (If not, wait a few minutes and click the *Check Again for my PiAware*-button.) Hopefully, your receiver is now visible under the *Linked PiAware Receivers* header.
+ 9. In the left-hand-side menu on the top of the page, click the *My ADBS-B* menu item. Your device should be listed in an orange rectangle. Next, click the cogwheel icon on the right-hand side of the screen.
+ 10. Click the *Configure Location*-button, and verify that the location matches the coordinates you entered earlier. If not, correct them.
+ 11. Click the *Configure Height*-button, and specify the altitude of your receiver. The value should match the number you entered in the `ALT` variable in part 1.
+ 12. If you don't face any bandwidth constraints, enable multilateration (MLAT). Enabling MLAT lets your receiver connect to other nearby receivers to multilaterate the positions of aircraft that does not report their position through ADS-B. This option increases the bandwidth usage a bit but gives more visible aircraft positions in return. 
+ 13. Specify the other settings in the FlightAware lightbox according to your personal preferences. Close the lightbox.
+ 14. Finally, verify that FlightAware is receiving data from your receiver. You'll find your receiver's dashboard by clicking on the *My ADS-B* top menu item at [flightaware.com](https://www.flightaware.com). 
+ 
 ## Part 4 – Configure FlightRadar24
 ### Alternative A: Port an existing FlightRadar24 receiver
 If you have previously set up a FlightRadar24 receiver and want to port it to balena, you only have to do the following steps:
@@ -172,8 +174,8 @@ If you have previously set up a Plane Finder receiver and want to port it to bal
 If you have not previously set up a Plane Finder receiver that you want to reuse, do the following steps:
 
  1. Register a new [Plane Finder account](https://planefinder.net).
- 2. Locate your local clone of this git repo, `balena-ads-b`, then navigate to the folder `planefinder`.
- 3. Open the file `SharecodeGenerator.html` in your web browser.
+ 2. If you cloned this repo, `balena-ads-b`, in part 2 of this guide, locate it on your computer and find the folder `planefinder`. Alternatively, if you used the *Deploy with balena*-button, download the following archive and unzip it: [SharecodeGenerator.zip](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/planefinder/SharecodeGenerator.zip)
+ 3. Locate the the file `SharecodeGenerator.html` and open it in your web browser.
  4. Fill in the form to generate a Plane Finder share code. Use the same email address as you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds, it should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
  5. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
  6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.

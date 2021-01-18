@@ -3,7 +3,7 @@ set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
 
-if [[ ",$DISABLED_SERVICES," =~ ",$BALENA_SERVICE_NAME," ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled."
         sleep infinity
 fi
@@ -36,11 +36,11 @@ then
         sleep infinity
 fi
 
-# If dump978-fa is enabled through config, enable it in rbfeed.
-if [[ "$DUMP978_ENABLED" = "true" ]]; then
-	export DUMP978RB_ENABLED=true
+# If UAT is enabled through config, enable it in rbfeed.
+if [[ "$UAT_ENABLED" = "true" ]]; then
+	export UAT_RB_ENABLED=true
 else
-	export DUMP978RB_ENABLED=false
+	export UAT_RB_ENABLED=false
 fi
 
 echo "Settings verified, proceeding with startup."
@@ -57,8 +57,8 @@ chmod a+rw /etc/rbfeeder.ini
 arch="$(dpkg --print-architecture)"
 echo System Architecture: $arch
 
-# If dump978-fa is enabled through config, activate socat port routing.
-if [[ "$DUMP978_ENABLED" = "true" ]]; then
+# If UAT is enabled through config, activate socat port routing.
+if [[ "$UAT_ENABLED" = "true" ]]; then
 	socat TCP-LISTEN:30979,fork TCP:dump978-fa:30979 &
 fi
 

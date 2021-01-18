@@ -19,7 +19,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG PLANEFINDER_VERSION=4.1.1
+ARG PLANEFINDER_VERSION=4.2.70
 
 COPY planefinder_installer.sh /tmp
 COPY start.sh /

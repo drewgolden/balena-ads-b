@@ -3,7 +3,7 @@ set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
 
-if [[ ",$DISABLED_SERVICES," =~ ",$BALENA_SERVICE_NAME," ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled."
         sleep infinity
 fi
@@ -18,8 +18,10 @@ missing_variables=false
         
 # Begin defining all the required configuration variables.
 
+[ -z "$FLIGHTAWARE_FEEDER_ID" ] && echo "FlightAware feeder ID is missing, will abort startup." && missing_variables=true || echo "FlightAware feeder ID is set: $FLIGHTAWARE_FEEDER_ID"
 [ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
 [ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
+[ -z "$ALT" ] && echo "Receiver altitude is missing, will abort startup." && missing_variables=true || echo "Receiver altitude is set: $ALT"
 [ -z "$RECEIVER_HOST" ] && echo "Receiver host is missing, will abort startup." && missing_variables=true || echo "Receiver host is set: $RECEIVER_HOST"
 [ -z "$RECEIVER_PORT" ] && echo "Receiver port is missing, will abort startup." && missing_variables=true || echo "Receiver port is set: $RECEIVER_PORT"
 [ -z "RECEIVER_MLAT_PORT" ] && echo "Receiver MLAT port is missing, will abort startup." && missing_variables=true || echo "Receiver MLAT port is set: $RECEIVER_MLAT_PORT"
@@ -49,20 +51,16 @@ echo " "
 /usr/bin/piaware-config receiver-type other
 /usr/bin/piaware-config receiver-host "${RECEIVER_HOST}"
 /usr/bin/piaware-config receiver-port "${RECEIVER_PORT}"
+/usr/bin/piaware-config feeder-id "${FLIGHTAWARE_FEEDER_ID}"
 
 # If dump978-fa is disabled through config, disable it in piaware.
-if [[ "$DUMP978_ENABLED" = "true" ]]; then
+if [[ "$UAT_ENABLED" = "true" ]]; then
 	/usr/bin/piaware-config uat-receiver-type other
     /usr/bin/piaware-config uat-receiver-host dump978-fa
     /usr/bin/piaware-config uat-receiver-port 30978
 else
 	/usr/bin/piaware-config uat-receiver-type none
 
-fi
-
-# Add FlightAware Feeder ID if present.
-if [ -n "${FLIGHTAWARE_FEEDER_ID}" ]; then
-  /usr/bin/piaware-config feeder-id "${FLIGHTAWARE_FEEDER_ID}"
 fi
 
 # Start piaware and put it in the background.
