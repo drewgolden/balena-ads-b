@@ -6,7 +6,7 @@ EXPOSE 30978 30979 8978
 ENV DUMP978_DEVICE=00000978
 ENV DUMP978_ENABLED=false
 
-ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd soapysdr-module-rtlsdr gettext-base libboost-filesystem1.67.0 libboost-regex1.67.0 libboost-system1.67.0" 
+ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.67.0 libboost-regex1.67.0 libboost-system1.67.0" 
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -16,20 +16,20 @@ RUN apt update && \
 FROM base AS buildstep
 
 ARG DUMP978_VERSION=v4.0
-ARG TEMP_INSTALL="build-essential cmake git debhelper pkg-config libboost-system-dev libboost-regex-dev libusb-1.0-0-dev libboost-filesystem-dev libboost-program-options-dev libsoapysdr-dev dh-systemd"  
+ARG TEMP_INSTALL="build-essential cmake git debhelper pkg-config libboost-system-dev libboost-regex-dev libusb-1.0-0-dev libboost-filesystem-dev libboost-program-options-dev libsoapysdr-dev librtlsdr-dev dh-systemd"  
 
 RUN apt update && \
 	apt install -y $TEMP_INSTALL
 
 WORKDIR /tmp
 
-RUN git clone https://github.com/steve-m/librtlsdr && \
-	cd librtlsdr && \
-	mkdir build && cd build && cmake ../ && make && make install && ldconfig && cd .. && \
-	dpkg-buildpackage -b && cd .. && \
-	dpkg -i librtlsdr0_*.deb && \
-	dpkg -i librtlsdr-dev_*.deb && \
-	apt-mark hold librtlsdr0 librtlsdr-dev
+#RUN git clone https://github.com/steve-m/librtlsdr && \
+#	cd librtlsdr && \
+#	mkdir build && cd build && cmake ../ && make && make install && ldconfig && cd .. && \
+#	dpkg-buildpackage -b && cd .. && \
+#	dpkg -i librtlsdr0_*.deb && \
+#	dpkg -i librtlsdr-dev_*.deb && \
+#	apt-mark hold librtlsdr0 librtlsdr-dev
 #	git clone https://github.com/pothosware/SoapySDR.git && \
 #	cd SoapySDR && \
 #	mkdir build && cd build && cmake .. && make -j4 &&  make install && ldconfig && cd .. && \
@@ -52,8 +52,8 @@ RUN git clone https://github.com/flightaware/dump978 && \
 
 FROM base AS release
 
-COPY --from=buildstep /tmp/librtlsdr0_*.deb /tmp/
-COPY --from=buildstep /tmp/rtl-sdr_*.deb /tmp/
+#COPY --from=buildstep /tmp/librtlsdr0_*.deb /tmp/
+#COPY --from=buildstep /tmp/rtl-sdr_*.deb /tmp/
 #COPY --from=buildstep /tmp/libsoapysdr0.7*.deb /tmp/ 
 #COPY --from=buildstep /tmp/soapysdr0.7*.deb /tmp/
 #COPY --from=buildstep /tmp/soapysdr-module-rtlsdr_*.deb /tmp/
@@ -64,8 +64,8 @@ COPY add-serial-978.sh /
 
 WORKDIR /tmp
 
-RUN dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
-	apt-mark hold librtlsdr0 && \
+RUN #dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
+#	apt-mark hold librtlsdr0 && \
 #	dpkg -i libsoapysdr0.7*.deb soapysdr0.7*.deb soapysdr-module-rtlsdr_*.deb && \
 #	apt-mark hold libsoapysdr0.7 soapysdr0.7-module-rtlsdr soapysdr-module-rtlsdr && \
 	dpkg -i dump978-fa_*.deb skyaware978_*.deb && \

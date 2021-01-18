@@ -8,7 +8,7 @@ ENV DUMP1090_GAIN=-10
 ENV DUMP1090_PPM=0
 ENV DUMP1090_MAX_RANGE=360
 
-ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf1 libhackrf0 liblimesuite18.06-1"
+ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf1 libhackrf0 liblimesuite18.06-1 librtlsdr0 rtl-sdr"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -18,22 +18,22 @@ RUN apt update && \
 FROM base AS buildstep
 
 ARG DUMP1090_VERSION=v4.0
-ARG TEMP_INSTALL="git build-essential cmake debhelper pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev libusb-1.0-0-dev apt-utils apt-transport-https dh-systemd"
+ARG TEMP_INSTALL="git build-essential cmake debhelper pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev libusb-1.0-0-dev librtlsdr-dev apt-utils apt-transport-https dh-systemd"
 
 RUN apt update && \
 	apt install -y $TEMP_INSTALL
 
 WORKDIR /tmp
 
-RUN git clone https://github.com/steve-m/librtlsdr && \
-	cd librtlsdr && \
-	mkdir build && cd build && cmake ../ && make && make install && ldconfig && cd .. && \
-	dpkg-buildpackage -b && cd .. && \
-	dpkg -i librtlsdr0_*.deb && \
-	dpkg -i librtlsdr-dev_*.deb && \
-	apt-mark hold librtlsdr0 librtlsdr-dev  
+#RUN git clone https://github.com/steve-m/librtlsdr && \
+#	cd librtlsdr && \
+#	mkdir build && cd build && cmake ../ && make && make install && ldconfig && cd .. && \
+#	dpkg-buildpackage -b && cd .. && \
+#	dpkg -i librtlsdr0_*.deb && \
+#	dpkg -i librtlsdr-dev_*.deb && \
+#	apt-mark hold librtlsdr0 librtlsdr-dev  
 
-WORKDIR /tmp
+#WORKDIR /tmp
 
 RUN git clone https://github.com/flightaware/dump1090 && \
 	cd dump1090 && \
@@ -42,8 +42,6 @@ RUN git clone https://github.com/flightaware/dump1090 && \
 
 FROM base AS release
 
-COPY --from=buildstep /tmp/librtlsdr0_*.deb /tmp/
-COPY --from=buildstep /tmp/rtl-sdr_*.deb /tmp/
 COPY --from=buildstep /tmp/dump1090-fa_*.deb /tmp/
 COPY start.sh /
 COPY add-serial-1090.sh /
@@ -51,8 +49,8 @@ COPY showstrongmessages.sh /
 
 WORKDIR /tmp
 
-RUN dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
-	apt-mark hold librtlsdr0 && \
+RUN # dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
+	# apt-mark hold librtlsdr0 && \
 	dpkg -i dump1090-fa_*.deb && \
 	rm -rf /tmp/* && \
 	mkdir -p /run/dump1090-fa && \
