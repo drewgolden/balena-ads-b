@@ -64,11 +64,12 @@ COPY add-serial-978.sh /
 
 WORKDIR /tmp
 
-RUN #dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
+#RUN dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
 #	apt-mark hold librtlsdr0 && \
 #	dpkg -i libsoapysdr0.7*.deb soapysdr0.7*.deb soapysdr-module-rtlsdr_*.deb && \
 #	apt-mark hold libsoapysdr0.7 soapysdr0.7-module-rtlsdr soapysdr-module-rtlsdr && \
-	dpkg -i dump978-fa_*.deb skyaware978_*.deb && \
+	
+RUN dpkg -i dump978-fa_*.deb skyaware978_*.deb && \
 	mkdir -p /run/dump978-fa && \
 	mkdir -p /run/skyaware978 && \
 	chmod +x /start.sh && \

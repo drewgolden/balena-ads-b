@@ -49,9 +49,10 @@ COPY showstrongmessages.sh /
 
 WORKDIR /tmp
 
-RUN # dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
-	# apt-mark hold librtlsdr0 && \
-	dpkg -i dump1090-fa_*.deb && \
+#RUN dpkg -i librtlsdr0_*.deb rtl-sdr_*.deb && \
+# 	 apt-mark hold librtlsdr0 && \
+
+RUN dpkg -i dump1090-fa_*.deb && \
 	rm -rf /tmp/* && \
 	mkdir -p /run/dump1090-fa && \
 	chmod +x /start.sh && \
