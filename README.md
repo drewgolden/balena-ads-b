@@ -1,11 +1,12 @@
 
+
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
 **ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), and [AirNav RadarBox](https://www.radarbox.com/). In return, you will receive free premium accounts worth several hundred dollars/year!
 
-👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b">Subscribe to our newsletter</a>&nbsp;👈🏻 to stay updated on the latest development of balena ADS-B Flight Tracker.
+👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a>&nbsp;👈🏻 to stay updated on the latest development of balena ADS-B Flight Tracker.
 
 **Supported devices**
 <table>
@@ -127,22 +128,22 @@ If you have not previously set up a FlightAware receiver that you want to reuse,
  13. Specify the other settings in the FlightAware lightbox according to your personal preferences. Close the lightbox.
  14. Finally, verify that FlightAware is receiving data from your receiver. You'll find your receiver's dashboard by clicking on the *My ADS-B* top menu item at [flightaware.com](https://www.flightaware.com). 
  
-## Part 4 – Configure FlightRadar24
-### Alternative A: Port an existing FlightRadar24 receiver
-If you have previously set up a FlightRadar24 receiver and want to port it to balena, you only have to do the following steps:
+## Part 4 – Configure Flightradar24
+### Alternative A: Port an existing Flightradar24 receiver
+If you have previously set up a Flightradar24 receiver and want to port it to balena, you only have to do the following steps:
 
- 1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `FR24_KEY` and paste the value of your existing FlightRadar24 key, e.g. `dv4rrt2g122g7233`. The key is located in the FlightRadar24 config file, which is usually found here: `/etc/fr24feed.ini`. (If you are unable to locate your old key, retrieve or create a new one it by following the steps in alternative B.)
+ 1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `FR24_KEY` and paste the value of your existing Flightradar24 key, e.g. `dv4rrt2g122g7233`. The key is located in the Flightradar24 config file, which is usually found here: `/etc/fr24feed.ini`. (If you are unable to locate your old key, retrieve or create a new one it by following the steps in alternative B.)
  2. Restart the *fr24feed* application under *Services* by clicking the "cycle" icon next to the service name.
 
-### Alternative B: Setup a new FlightRadar24 receiver
-If you have not previously set up a FlightRadar24 receiver that you want to reuse, do the following steps:
+### Alternative B: Setup a new Flightradar24 receiver
+If you have not previously set up a Flightradar24 receiver that you want to reuse, do the following steps:
 
  1. Head back to your device's page on the balena dashboard.
  2. Inside the *Terminal* section, click *Select a target*, then *fr24feed*, and finally *Start terminal session*.
- 3. This will open a terminal which lets you interact directly with your FlightRadar24 container.
+ 3. This will open a terminal which lets you interact directly with your Flightradar24 container.
  4. At the prompt, enter `fr24feed --signup`.
  5. When asked, enter your email address.
- 6. You will be asked if you have a FlightRadar sharing key. Unless you have one from the past that you would like to reuse, press return here.
+ 6. You will be asked if you have a Flightradar24 sharing key. Unless you have one from the past that you would like to reuse, press return here.
  7. If you want to activate multilateration, type `yes` at the next prompt. If you have restricted bandwidth available, consider leaving it off by typing `no`. 
  8. Enter the receiver's latitude. This should be the exact same value that you entered in the `LAT` variable in part 1.
  9. Enter the receiver's longitude. This should be the exact same value that you entered in the `LON` variable in part 1.
@@ -157,11 +158,12 @@ If you have not previously set up a FlightRadar24 receiver that you want to reus
  18. Enter `0` to disable log file writing.
  19. When asked for a log file path, just hit return.
  20. The configuration will now be submitted, and you are redirected back to the terminal.
- 21. At the prompt, type `cat /etc/fr24feed.ini`. Your FlightRadar settings will be displayed. 
+ 21. At the prompt, type `cat /etc/fr24feed.ini`. Your Flightradar24 settings will be displayed. 
  22. Find the line starting with `fr24key=`, and copy the string between the quotes. It will look something like this: `dv4rrt2g122g7233`.
  23. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `FR24_KEY` and paste the value from the previous step, e.g. `dv4rrt2g122g7233`.
  24. Restart the *fr24feed* application under *Services* by clicking the "cycle" icon next to the service name.
- 25. As soon as your receiver starts receiving data, you will receive an e-mail from FlightRadar24 containing your login credentials.
+ 25. Head over to [Flightradar24's website](https://www.flightradar24.com/premium/signup) and create a new *Basic* account, using the *exact same email address* that you filled in in step 5.
+ 26. Shortly after your receiver starts feeding data to Flightradar24, your *Basic* account will be upgraded to their *Business* plan. Enjoy!
 
 ## Part 5 – Configure Plane Finder
 ### Alternative A: Port an existing Plane Finder receiver
@@ -210,18 +212,18 @@ If you have not previously set up a OpenSky Network receiver that you want to re
 If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
 
  1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RADARBOX_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1`. To get your key, issue the following command at your current RadarBox device: `sudo rbfeeder --showkey --no-start`.
- 2. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 2. Restart the *radarbox* application under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new RadarBox receiver
 If you have not previously set up a RadarBox receiver that you want to reuse, do the following steps:
 
  1. Register a new [RadarBox account](https://www.radarbox.com/register). Make sure to activate it using the email that's sent to you.
  2. Head back to your device's page on the Balena dashboard.
- 3. Inside the *Terminal* section, click *Select a target*, then *rb24feed*, and finally *Start terminal session*.
+ 3. Inside the *Terminal* section, click *Select a target*, then *radarbox*, and finally *Start terminal session*.
  4. This will open a terminal which lets you interact directly with your RadarBox container.
  5. At the prompt, enter `/showkey.sh`. Your RadarBox key will be displayed, and will look similar to this: `546b69e69b4671a742b82b10c674cdc1`.
  6. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
- 7. Restart the *rb24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 7. Restart the *radarbox* application under *Services* by clicking the "cycle" icon next to the service name.
  8.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page. Locate the input field named *Sharing Key,* and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
  9. Next, you might be asked to enter your feeder's location and altitude *above the ground.* Enter the same values that you entered in the `LAT` and `LON` variables earlier. When asked for the antenna's altitude, specify it i meters (or feet) *above the ground* – NOT above sea level as done previously. If you are not asked to enter this information, you can do it manually by clicking the *Edit* link under your receiver's ID on the left-hand side of the screen. 
  10. Finally, verify that RadarBox is receiving data from your receiver. You'll find your receiver by clicking on the *Account* menu at [radarbox.com](https://www.radarbox.com) , under the *Stations* accordion. 
