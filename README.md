@@ -1,5 +1,6 @@
 
 
+
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
 **ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
@@ -17,10 +18,10 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 <img height="24px" src="https://files.balena-cloud.com/images/intel-nuc/2.50.1%2Brev1.prod/logo.svg" alt="intel-nuc" style="max-width: 100%; margin: 0px 4px;"></td><td> Intel NUC</td>
 </tr>
 <tr><td>
-<img height="24px" src="https://files.balena-cloud.com/images/raspberry-pi/2.54.2%2Brev1.prod/logo.svg" alt="raspberry-pi" style="max-width: 100%; margin: 0px 4px;"></td><td> Raspberry Pi Zero and Zero W</td>
+<img height="24px" src="https://files.balena-cloud.com/images/jetson-nano-2gb-devkit/2.67.3%2Brev3.prod/logo.svg" alt="intel-nuc" style="max-width: 100%; margin: 0px 4px;"></td><td> Nvidia Jetson Nano 2GB Devkit SD</td>
 </tr>
 <tr><td>
-<img height="24px" src="https://files.balena-cloud.com/images/raspberry-pi/2.54.2%2Brev1.prod/logo.svg" alt="raspberry-pi" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 1 Model B+</td>
+<img height="24px" src="https://files.balena-cloud.com/images/jetson-nano/2.69.1%2Brev1.prod/logo.svg" alt="intel-nuc" style="max-width: 100%; margin: 0px 4px;"></td><td> Nvidia Jetson Nano SD-CARD</td>
 </tr>
 <tr><td>
 <img height="24px" src="https://files.balena-cloud.com/images/raspberrypi3/2.58.3%2Brev1.prod/logo.svg" alt="raspberrypi3" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 3 Model B+</td>
@@ -47,15 +48,13 @@ We'll build the receiver using the parts that are outlined on the Flightradar24,
 - https://flightaware.com/adsb/piaware/build
 - https://www.radarbox.com/raspberry-pi
 
-These sites suggest the Raspberry Pi 3 Model B+ as the preferred device, but this project runs on all the devices mentioned above. Still, if you plan to run a lot of services simultaneously, you should probably go for the Raspberry Pi 3 Model B+, the even more powerful Raspberry Pi 4 Model B, an Intel NUC, or the balenaFin.
-
-Please note that the Raspberry Pi Zero comes without ethernet and WiFi, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. The Raspberry Pi Zero comes with WiFi only.
+These sites suggest the Raspberry Pi 3 Model B+ as the preferred device. Still, this project runs on all the devices mentioned above. Suppose you are buying a new appliance specifically for this project. In that case, we suggest the **Raspberry Pi 4 Model B** with as much memory you can afford. It's excellent value for money.
 
 In addition to the device, you will need an RTL-SDR compatible USB dongle. The dongles are based on a digital television tuner, and numerous types will work – both generic TV sticks and specialized ADS-B sticks (produced by FlightAware). Although both options work, the ADS-B sticks seem to perform a little better.
 
 ## Part 2 – Setup balena and configure the device
 
-[![Deploy with button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/ketilmo/balena-ads-b&defaultDeviceType=raspberrypi3)
+[![Deploy with button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/ketilmo/balena-ads-b&defaultDeviceType=raspberrypi4-64)
 
 or
 
