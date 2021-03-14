@@ -56,10 +56,17 @@ services:
       - "8080:8080"
     labels:
       - "traefik.enable=true"
+      # New, permanent redirect (from 13 March 2021)
+      - "traefik.http.routers.skyaware.rule=PathPrefix(`/skyaware`)"
+      - "traefik.http.routers.skyaware.middlewares=skyaware-redirect" # <- dump1090-fa-redirect to be deprecated later
+      - "traefik.http.middlewares.skyaware-redirect.redirectregex.regex=^.*/skyaware$$"
+      - "traefik.http.middlewares.skyaware-redirect.redirectregex.replacement=/skyaware/"
+      - "traefik.http.middlewares.skyaware-redirect.redirectregex.permanent=true"
+      # Temporary redirect for legacy purposes (from 13 March 2021)
       - "traefik.http.routers.dump1090-fa.rule=PathPrefix(`/dump1090-fa`)"
-      - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect"
-      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa$$"
-      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/dump1090-fa/"
+      - "traefik.http.routers.dump1090-fa.middlewares=dump1090-fa-redirect" 
+      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.regex=^.*/dump1090-fa.*$$"
+      - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.replacement=/skyaware/"
       - "traefik.http.middlewares.dump1090-fa-redirect.redirectregex.permanent=true"
 # Uncomment to enable dump978 UAT tracking (USA only).
   dump978-fa:
