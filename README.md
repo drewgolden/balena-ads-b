@@ -1,13 +1,14 @@
-
-
-
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
+**ADS-B Flight Tracker running on balena with support for FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
 
 Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), and [AirNav RadarBox](https://www.radarbox.com/). In return, you will receive free premium accounts worth several hundred dollars/year!
 
 👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a>&nbsp;👈🏻 to stay updated on the latest development of balena ADS-B Flight Tracker.
+
+🚨&nbsp;Got stuck? [Create a post](https://forums.balena.io/t/the-balena-ads-b-thread/272290) in our forum thread or [raise an issue](https://github.com/ketilmo/balena-ads-b/issues).
+
+📺 &nbsp;Want to know more about the project? [Watch this video](https://youtu.be/-8RgToapBoQ).
 
 **Supported devices**
 <table>
@@ -235,7 +236,7 @@ When you have local network access to your receiver, you can explore the data st
 Away from your local network but still eager to know what planes are cruising over your home? Here, balena's builtin *Public Device URL* comes in handy. Open your device page in balena console and locate the `PUBLIC DEVICE URL` header, and flip the switch below to enable it. Finally, click on the arrow icon next to the button, add the desired URL postfix specified below and voila – you should see what's going on in your area.
 
  **Dump1090's Radar View**
-This view visualizes everything that your receiver sees, including multilaterated plane positions. When you are in your local network, head to `YOURIP:8080` to check it out. When remote, open balena's *Public Device URL* and add `/dump1090-fa/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/dump1090-fa/`
+This view visualizes everything that your receiver sees, including multilaterated plane positions. When you are in your local network, head to `YOURIP:8080` to check it out. When remote, open balena's *Public Device URL* and add `/skyaware/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/skyaware/`
 
 **Plane Finder's Radar View**
 It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice viewing options. Head to `YOURIP:30053` to check it out. When remote, open balena's *Public Device URL* and add `/planefinder/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/planefinder/`
