@@ -45,6 +45,8 @@ This project is inspired by and has borrowed code from the following repos and f
 
 Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), [mikenye](https://github.com/mikenye/), and [abcd567a](https://github.com/abcd567a) for sharing!
 
+Thanks to [rmorillo24](https://github.com/rmorillo24/) for verifying balenaFin compability and to [adaptive](https://github.com/adaptive/) for confirming Raspberry Pi 400 compability!
+
 ## Part 1 – Build the receiver
 
 We'll build the receiver using the parts that are outlined on the Flightradar24, FlightAware, and RadarBox websites: 
