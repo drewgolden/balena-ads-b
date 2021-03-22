@@ -236,15 +236,17 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
 
 ## Part 8 - Configure ADSB Exchange Feeder and MLAT
 ADSB Exchange requires very little in the way of setup. 
-All that you need to do is name the feeder and claim your IP on the ADSB Exchange site.
+All that you need to do is name the feeder, generate a UUID, and claim your IP on the ADSB Exchange site.
 
-1. Head back to the Balena dashboard and your device's page.
-Click on the *Device Variables*-button – *D(x)*. Add a variable named `ADSBEXCHANGE_RECEIVER_NAME` and give a suitable value (e.g. your location).
-2. Restart the *adsbexchange-feed* and *adsbexchange-mlat* applications under *Services* by clicking the "cycle" icon next to the service names.
-3. Next, wait a minute or two for the services to restart and head over to ADSB Exchange's 
+1. Head over to your device's Summary page at balena.io. Inside the Terminal section, click Select a target, then adsbexchange-feed, and finally Start terminal session. This will open a terminal which lets you interact directly with your ADSB Exchange container.
+2. At the prompt, type `/usr/local/share/adsbexchange-stats/create-uuid.sh` followed by return. Your ADSB-Exchange UUID is displayed. Note it down.
+3. At the same prompt, type /create-sitename.sh followed by return. Enter a friendly name for your feeder as per the instructions on screen (e.g. your location). Hit return and note down the result.
+4. Click on the *Device Variables*-button – *D(x)*. Add a variable named `ADSB_EXCHANGE_UUID` with the value from step 2.
+5. Click on the *Device Variables*-button – *D(x)*. Add a variable named `ADSB_EXCHANGE_SITENAME` with the value from step 2.
+6. Restart the *adsbexchange-feed* and *adsbexchange-mlat* applications under *Services* by clicking the "cycle" icon next to the service names.
+7. Next, wait a minute or two for the services to restart and head over to ADSB Exchange's 
 [Feeder Status](https://www.adsbexchange.com/myip/) page from a PC on the same network as the feeder.
-Verify that your feeder is shown as registered and that ADSB Exchange is receiving your feed and mlat data.
-
+8. Verify that your feeder is shown as registered and that ADSB Exchange is receiving your feed and mlat data.
 
 ## Part 9 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?

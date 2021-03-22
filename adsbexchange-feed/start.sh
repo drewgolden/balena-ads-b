@@ -18,11 +18,11 @@ missing_variables=false
         
 # Begin defining all the required configuration variables.
 
-#[ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
-#[ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
-#[ -z "$ALT" ] && echo "Receiver altitude is missing, will abort startup." && missing_variables=true || echo "Receiver altitude is set: $ALT"
-#[ -z "$MLAT_CLIENT_USER" ] && echo "MLAT client username is missing, will abort startup." && missing_variables=true || echo "MLAT Client Username is set: $MLAT_CLIENT_USER"
-#[ -z "$MLAT_SERVER" ] && echo "MLAT server is missing, will abort startup." && missing_variables=true || echo "MLAT server is set: $MLAT_SERVER"
+[ -z "$ADSB_EXCHANGE_SITENAME" ] && echo "ADS-B Exchange username is missing, will abort startup." && missing_variables=true || echo "ADS-B Exchange username is set: $ADSB_EXCHANGE_SITENAME"
+[ -z "$ADSB_EXCHANGE_UUID" ] && echo "ADS-B Exchange UUID is missing, will abort startup." && missing_variables=true || echo "ADS-B Exchange UUID is set: $ADSB_EXCHANGE_UUID"
+[ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
+[ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
+[ -z "$ALT" ] && echo "Receiver altitude is missing, will abort startup." && missing_variables=true || echo "Receiver altitude is set: $ALT"
 [ -z "$RECEIVER_HOST" ] && echo "Receiver host is missing, will abort startup." && missing_variables=true || echo "Receiver host is set: $RECEIVER_HOST"
 [ -z "$RECEIVER_PORT" ] && echo "Receiver port is missing, will abort startup." && missing_variables=true || echo "Receiver port is set: $RECEIVER_PORT"
 
@@ -39,6 +39,10 @@ fi
 
 echo "Settings verified, proceeding with startup."
 echo " "
+
+# Write settings to config file and set permissions.
+envsubst < /boot/adsbx-uuid.tpl > /boot/adsbx-uuid
+chmod a+rw /boot/adsbx-uuid
 
 # Variables are verified – continue with startup procedure.
 

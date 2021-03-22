@@ -18,12 +18,13 @@ missing_variables=false
         
 # Begin defining all the required configuration variables.
 
+[ -z "$ADSB_EXCHANGE_SITENAME" ] && echo "ADS-B Exchange username is missing, will abort startup." && missing_variables=true || echo "ADS-B Exchange username is set: $ADSB_EXCHANGE_SITENAME"
+[ -z "$ADSB_EXCHANGE_UUID" ] && echo "ADS-B Exchange UUID is missing, will abort startup." && missing_variables=true || echo "ADS-B Exchange UUID is set: $ADSB_EXCHANGE_UUID"
 [ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
 [ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
 [ -z "$ALT" ] && echo "Receiver altitude is missing, will abort startup." && missing_variables=true || echo "Receiver altitude is set: $ALT"
 [ -z "$RECEIVER_HOST" ] && echo "Receiver host is missing, will abort startup." && missing_variables=true || echo "Receiver host is set: $RECEIVER_HOST"
 [ -z "$RECEIVER_PORT" ] && echo "Receiver port is missing, will abort startup." && missing_variables=true || echo "Receiver port is set: $RECEIVER_PORT"
-[ -z "$ADSBEXCHANGE_RECEIVER_NAME" ] && echo "ADSBEXCHANGE Receiver port is missing, will abort startup." && missing_variables=true || echo "ADSBEXCHANGE Receiver port is set: $ADSBEXCHANGE_RECEIVER_NAME"
 
 # End defining all the required configuration variables.
 
@@ -47,7 +48,7 @@ do
 	then
 		echo Connected to feed.adsbexchange.com:31090
                 echo Feeding from "${RECEIVER_HOST}:${RECEIVER_PORT}" with MLAT results at "${RECEIVER_HOST}:3104"
-		mlat-client --input-type dump1090 --input-connect ${RECEIVER_HOST}:${RECEIVER_PORT} --lat ${LAT} --lon ${LON} --alt ${ALT} --user ${ADSBEXCHANGE_RECEIVER_NAME} --server feed.adsbexchange.com:31090
+		mlat-client --input-type dump1090 --input-connect ${RECEIVER_HOST}:${RECEIVER_PORT} --lat ${LAT} --lon ${LON} --alt ${ALT} --user ${ADSB_EXCHANGE_SITENAME} --server feed.adsbexchange.com:31090
 		echo Disconnected
 	else
 		echo Unable to connect to feed.adsbexchange.com, trying again in 30 seconds!
